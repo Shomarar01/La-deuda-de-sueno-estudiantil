@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Deuda de Sueño</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Librerías -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+</head>
+<body>
+
+    <header class="portada">
+        <h1>La Deuda de Sueño: <br>Hábitos, horarios y calificaciones en la universidad.</h1>
+        <p>Un viaje visual por los hábitos nocturnos y su impacto real en el rendimiento universitario.</p>
+        <p class="instruccion">Desliza para explorar los datos ↓</p>
+    </header>
+
+    <!-- AQUÍ EMPIEZA EL SCROLLYTELLING (Solo Textos y Gráfica) -->
+    <section id="scrolly">
+        <article class="textos-scroll">
+            <!-- Acto 0: El Contexto Global -->
+            <div class="step" data-step="0">
+                <h2>La pandemia silenciosa</h2>
+                <p>Antes de mirar a las aulas, miremos al mundo. La falta de sueño se ha convertido en un indicador crítico de salud pública a nivel global. Pero, ¿qué pasa cuando esta crisis mundial choca con la presión de la vida universitaria?</p>
+                <p class="instruccion-scroll">Sigue deslizando para descubrirlo.</p>
+            </div>
+
+            <!-- Escena 1: Enjambre Universitario -->
+            <div class="step" data-step="1">
+                <h2>El mito del estudiante inagotable</h2>
+                <p>Cuando pisamos la universidad por primera vez, creemos que nuestra energía es infinita. Sin embargo, los datos rompen esa ilusión inmediatamente.</p>
+                <p>Cada punto a la derecha representa a un estudiante real. Observa cómo <strong>la deuda de sueño (puntos rojos) es una crisis crónica desde el primer año</strong>.</p>
+                <p>Lejos de adaptarse o mejorar sus hábitos conforme avanzan en la carrera, casi la mitad de los estudiantes universitarios sobreviven con menos de 7 horas de descanso por noche, sin importar en qué año se encuentren.</p>
+                <p class="fuente">Fuente: Student Sleep Patterns (Kaggle)</p>
+            </div>
+
+            <!-- Escena 2: El Reloj del Desfase -->
+            <div class="step" data-step="2">
+                <h2>El reloj biológico roto</h2>
+                <p>En un adulto sano, todos estos puntos estarían agrupados en la parte superior, durmiendo entre las 10:00 PM y la medianoche.</p>
+                <p>La universidad destruye este ciclo. En este reloj de 24 horas, la posición de cada punto indica a qué hora se duerme un estudiante entre semana. Los más cercanos al centro son los que duermen menos horas (el núcleo crítico).</p>
+                <p>Pero observa las <strong>estelas curvas</strong>. Estas líneas representan el <strong>Jetlag Social</strong>: casi la mitad de los universitarios desfasan su horario por 2 horas o más los fines de semana. Las estelas marcan el viaje: el punto grande es su horario entre semana, y el punto pequeño, su desfase el fin de semana. Es el equivalente fisiológico a viajar a otro huso horario cada viernes y regresar el lunes, destrozando su metabolismo.</p>
+                <p class="fuente">Fuente: Student Sleep Patterns (Kaggle)</p>
+            </div>
+
+            <!-- Escena 3: El Costo del Caos (Burbujas) -->
+            <div class="step" data-step="3">
+                <h2>El costo del caos</h2>
+                <p>Si creías que dormir mucho te salvaba, la ciencia tiene malas noticias. En esta gráfica cruzamos las horas de sueño (eje horizontal) con el promedio académico real (eje vertical).</p>
+                <p>El tamaño de cada burbuja representa la <strong>variabilidad de su horario</strong>. Entre más grande la burbuja, más caótica es su rutina (hoy duerme a las 10 PM, mañana a las 4 AM).</p>
+                <p>Observa cómo las burbujas gigantes tienden a hundirse hacia abajo, arrastrando las calificaciones. La inconsistencia destruye tu promedio, sin importar cuántas horas duermas.</p>
+                <p class="fuente">Fuente: Exploring Sleep Patterns (Carnegie Mellon University)</p>
+            </div>
+
+            <!-- Escena 4: La Supervivencia (Montañas) -->
+            <div class="step" data-step="4">
+                <h2>El modo supervivencia</h2>
+                <p>Cuando la noche no alcanza, el cuerpo cobra la deuda de día. Aquí dividimos a los estudiantes por su nivel de carga de materias.</p>
+                <p>Los estudiantes con carga académica "Alta" son obligados a sacrificar su sueño nocturno, utilizando siestas estratégicas a lo largo del día como un mecanismo de pura supervivencia para mantener el ritmo de la universidad.</p>
+                <p class="fuente">Fuente: Exploring Sleep Patterns (CMU)</p>
+            </div>
+            
+            <!-- Escena 5: El Veredicto Final (Cuadrantes) -->
+            <div class="step" data-step="5">
+                <h2>El peso de las malas decisiones</h2>
+                <p>Todo está conectado. En esta última gráfica dividimos a los estudiantes en cuatro realidades. El eje vertical marca su rendimiento académico, y el horizontal la calidad de su sueño.</p>
+                <p>Observa cómo los puntos se pintan de <strong>rojo</strong> al detectar el uso de pantallas o cafeína antes de dormir. Como si tuvieran un peso extra, la inmensa mayoría de estos puntos rojos se desploman hacia los cuadrantes inferiores.</p>
+                <p>La conclusión de los datos es irrefutable: la deuda de sueño y los malos hábitos no son herramientas de supervivencia universitaria, son un ancla que hunde tu promedio irremediablemente.</p>
+                <p class="fuente">Fuente: Student Insomnia and Educational Outcomes (Mendeley Data)</p>
+            </div>
+        </article>
+
+        <!-- Gráfica Fija pegada a la derecha -->
+        <figure class="grafica-fija">
+            <div id="lienzo-d3" style="width: 100%; height: 100%; min-height: 500px;"></div>
+        </figure>
+    </section>
+    <!-- AQUÍ TERMINA EL SCROLLYTELLING -->
+
+
+    <!-- SECCIÓN FINAL: CONCLUSIÓN Y CALCULADORA (Totalmente independiente) -->
+    <section id="conclusion-final">
+        <div class="texto-conclusion">
+            <h2>Simulador de Ritmo Circadiano</h2>
+            <p>La evidencia es irrefutable. Los datos de Kaggle, CMU y Mendeley convergen en una misma realidad: la deuda de sueño no es un trofeo, es un ancla. El "Jetlag Social", las siestas de supervivencia y el uso de pantallas o cafeína nocturna destruyen la calidad del descanso y arrastran las calificaciones al fondo.</p>
+            <p>Los datos sirven para tomar el control. Ajusta tus horarios en la calculadora inferior y descubre, según nuestro modelo predictivo, cuál es tu pronóstico académico.</p>
+        </div>
+
+        <div class="calculadora-interactiva">
+            <!-- Panel de Controles -->
+            <div class="calc-controles">
+                <div class="input-grupo">
+                    <label>Hora de dormir (Entre semana)</label>
+                    <input type="time" id="calc-dormir" value="01:00">
+                </div>
+                <div class="input-grupo">
+                    <label>Hora de despertar (Entre semana)</label>
+                    <input type="time" id="calc-despertar" value="07:00">
+                </div>
+                <div class="input-grupo">
+                    <label>Hora de dormir (Fin de semana)</label>
+                    <input type="time" id="calc-dormir-fin" value="03:00">
+                </div>
+                <div class="input-grupo toggle-grupo">
+                    <label>¿Pantallas o café antes de dormir?</label>
+                    <label class="switch">
+                        <input type="checkbox" id="calc-habitos" checked>
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Panel de Resultados -->
+            <div class="calc-resultados">
+                <div class="res-metrica">
+                    <span>Duración estimada</span>
+                    <h3 id="out-horas">6h 0m</h3>
+                </div>
+                <div class="res-metrica">
+                    <span>Calidad del sueño</span>
+                    <h3 id="out-calidad" class="texto-rojo">Deficiente</h3>
+                </div>
+                <div class="res-metrica">
+                    <span>Pronóstico Académico</span>
+                    <h3 id="out-rendimiento" class="texto-rojo">Bajo / En Riesgo</h3>
+                </div>
+                <p id="out-mensaje" class="insight-dinamico">El uso de estimulantes/pantallas bloquea tu melatonina, garantizando un rendimiento por debajo del promedio.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="js/calculadora.js"></script>
+    <script src="js/grafica_cuadrantes.js"></script>
+    <script src="js/grafica_montanas.js"></script>
+    <script src="js/grafica_burbujas.js"></script>
+    <script src="js/grafica_enjambre.js"></script>
+    <script src="js/grafica_reloj.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

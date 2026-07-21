@@ -1,0 +1,299 @@
+/* =========================================
+IDENTIDAD VISUAL: ÍNDIGO VIVO
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+    /* Paleta de Colores (Extraída de "Índigo Vivo") */
+    --bg-profundo: #1E1B4B;       /* Fondo principal */
+    --bg-superficie: #312E81;     /* Tarjetas e interfaces */
+    --indigo-neutro: #6366F1;     /* Bordes y elementos secundarios */
+    --texto-principal: #F1F5F9;   /* Blanco azulado para máxima lectura */
+    --texto-secundario: #94A3B8;  /* Gris sutil para leyendas */
+
+    /* Colores Funcionales (D3.js) */
+    --data-sueno-ok: #38BDF8;     /* Cielo - Positivo */
+    --data-descanso: #34D399;     /* Verde - Transición */
+    --data-alerta: #FB7185;       /* Rosa - Deuda/Peligro */
+
+    /* Tipografía y Escala Modular (Base 16px) */
+    --font-titulos: 'Lora', serif;
+    --font-textos: 'Inter', sans-serif;
+    
+    --text-sm: 0.8rem;   /* 12px - Fuentes y notas */
+    --text-base: 1rem;   /* 16px - Párrafos */
+    --text-lg: 1.25rem;  /* 20px - Subtítulos */
+    --text-xl: 1.95rem;  /* 31px - Títulos de sección */
+    --text-2xl: 2.44rem; /* 39px - Título principal */
+    --text-3xl: 3.05rem; /* 48px - Título Hero */
+}
+
+/* =========================================
+   RESET Y ESTRUCTURA BASE
+   ========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-profundo);
+    color: var(--texto-principal);
+    font-family: var(--font-textos);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-titulos);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+/* =========================================
+   PORTADA (HERO SECTION)
+   ========================================= */
+.portada {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.portada h1 {
+    font-size: var(--text-3xl);
+    color: var(--data-sueno-ok);
+}
+
+.portada .bajada {
+    font-size: var(--text-lg);
+    color: var(--texto-secundario);
+    margin-bottom: 3rem;
+}
+
+.instruccion {
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--indigo-neutro);
+    animation: flotar 2s ease-in-out infinite;
+}
+
+@keyframes flotar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+
+/* =========================================
+SCROLLYTELLING (CONTENEDORES)
+   ========================================= */
+#scrolly {
+    position: relative;
+    display: flex;
+    max-width: 1400px; /* Ancho profesional */
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.textos-scroll {
+    position: relative;
+    width: 35%; /* Ligeramente más estrecho para dar espacio a la gráfica */
+    padding-right: 3rem;
+    z-index: 2;
+}
+
+/* Tarjetas de texto (Gestalt: Figura-Fondo) */
+.step {
+    margin-bottom: 70vh;
+    padding: 2rem 0; /* Quitamos el padding lateral para que fluya natural */
+    background-color: transparent; /* Adiós a la caja de color */
+    border: none; /* Adiós a las líneas */
+    opacity: 0.15; /* Súper tenue cuando no está activo */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateY(20px); /* Pequeño efecto de entrada */
+}
+
+.step h2 {
+    font-size: var(--text-xl);
+}
+
+.step.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.fuente {
+    font-size: var(--text-sm);
+    color: var(--indigo-neutro);
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(99, 102, 241, 0.3);
+    padding-top: 0.5rem;
+}
+
+/* =========================================
+LIENZO D3 (LA GRÁFICA)
+   ========================================= */
+.grafica-fija {
+    position: sticky;
+    top: 10vh;
+    width: 65%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent; /* Adiós al fondo */
+    border: none; /* Adiós al borde punteado */
+}
+
+/* --- CONCLUSIÓN Y CALCULADORA --- */
+#conclusion-final {
+    max-width: 900px;
+    margin: 10vh auto;
+    padding: 0 20px;
+    color: #F1F5F9;
+    font-family: 'Inter', sans-serif;
+}
+
+.texto-conclusion h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.texto-conclusion p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #94A3B8;
+    margin-bottom: 1.5rem;
+}
+
+/* Diseño sin cajas, puro layout de cuadrícula */
+.calculadora-interactiva {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.calc-controles {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.input-grupo label {
+    display: block;
+    font-size: 0.9rem;
+    color: #94A3B8;
+    margin-bottom: 8px;
+}
+
+
+
+/* Toggle Switch (Estilo moderno) */
+.toggle-grupo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider-toggle {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #334155;
+    transition: .4s;
+    border-radius: 34px;
+}
+.slider-toggle:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider-toggle { background-color: #FB7185; }
+input:checked + .slider-toggle:before { transform: translateX(26px); }
+
+/* Resultados limpios */
+.calc-resultados {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.res-metrica span {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94A3B8;
+}
+
+.res-metrica h3 {
+    font-size: 2rem;
+    margin: 5px 0 0 0;
+    transition: color 0.3s ease;
+}
+
+.insight-dinamico {
+    margin-top: 15px;
+    font-size: 1rem;
+    font-style: italic;
+    color: #CBD5E1;
+    border-left: 3px solid #6366F1;
+    padding-left: 15px;
+}
+
+/* --- MEJORA UX DE INPUTS DE TIEMPO --- */
+.input-grupo input[type="time"] {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 8px;
+    color: #F1F5F9;
+    font-size: 1.3rem;
+    font-family: 'Inter', sans-serif;
+    padding: 12px 15px;
+    outline: none;
+    width: 100%;
+    cursor: pointer;
+    color-scheme: dark; /* Obliga al navegador a usar su menú nativo en modo oscuro */
+    transition: all 0.3s ease;
+}
+
+.input-grupo input[type="time"]:hover {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: #6366F1;
+}
+
+/* --- COLORES DE TEXTO SUAVIZADOS PARA LECTURA --- */
+/* Usamos tonos más pastel/suaves para no deslumbrar en el texto */
+.texto-rojo { 
+    color: #FDA4AF !important; /* Un rosa pastel suave */
+    text-shadow: 0 0 10px rgba(244, 63, 94, 0.3);
+}
+.texto-verde { 
+    color: #5EEAD4 !important; /* Un teal/menta pastel suave */
+    text-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
+}
