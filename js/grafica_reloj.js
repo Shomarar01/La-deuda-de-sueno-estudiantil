@@ -1,4 +1,3 @@
-
 /**
  * ====================================================================
  * GRAFICA_RELOJ.JS - El Reloj Biológico Roto & Jetlag Social
@@ -124,18 +123,18 @@ const graficaReloj = {
 
         gReloj.append("path")
             .attr("d", healthyArc)
-            .attr("fill", "rgba(78, 205, 196, 0.12)")
-            .attr("stroke", "rgba(78, 205, 196, 0.3)")
+            .attr("fill", "rgba(129, 140, 248, 0.12)") // Azul Lavanda traslúcido
+            .attr("stroke", "rgba(129, 140, 248, 0.3)")
             .attr("stroke-dasharray", "3,3");
 
-        // Etiqueta Zona Saludable en posición libre de colisiones
+        // Etiqueta Zona Saludable
         const healthyAngle = angleScale(23);
         const healthyR = radiusScale(8.2);
         gReloj.append("text")
             .attr("x", healthyR * Math.sin(healthyAngle) - 15)
             .attr("y", -healthyR * Math.cos(healthyAngle))
             .attr("text-anchor", "middle")
-            .attr("fill", "#4ECDC4")
+            .attr("fill", "#818CF8") // Azul Lavanda
             .style("font-size", "10px")
             .style("font-weight", "600")
             .text("Zona Saludable (10PM - 12AM)");
@@ -193,7 +192,7 @@ const graficaReloj = {
                 .text(item.label);
         });
 
-        // --- D. LÍNEAS / ESTELAS (OPACIDAD CORREGIDA EN ESTADO INICIAL) ---
+        // --- D. LÍNEAS / ESTELAS ---
         const estelasGroup = gReloj.append("g").attr("class", "estelas");
         
         estelasGroup.selectAll(".estela")
@@ -205,9 +204,9 @@ const graficaReloj = {
             .attr("y1", d => d.y1)
             .attr("x2", d => d.x2)
             .attr("y2", d => d.y2)
-            .attr("stroke", "#FF7043")
+            .attr("stroke", "#FBBF24") // Ámbar para la línea de desfase
             .attr("stroke-width", 0.9)
-            .attr("stroke-opacity", 0.12); // Visibilidad equilibrada en reposo
+            .attr("stroke-opacity", 0.12);
 
         // --- E. INTERACTIVIDAD Y RESTAURACIÓN INMEDIATA ---
         const formatHour = (decimalHour) => {
@@ -220,22 +219,21 @@ const graficaReloj = {
             return `${displayH}:${displayM} ${ampm}`;
         };
 
-        // Función para restaurar el estado original (Efecto desaparece al quitar el cursor)
         const restaurarEstadoOriginal = () => {
             gReloj.selectAll(".estela")
                 .style("stroke-opacity", 0.12)
                 .style("stroke-width", 0.9)
-                .style("stroke", "#FF7043");
+                .style("stroke", "#FBBF24"); // Ámbar
 
             gReloj.selectAll("circle.punto-semana")
                 .style("opacity", 0.75)
-                .style("fill", "#73BBA3")
+                .style("fill", "#818CF8") // Azul Lavanda
                 .style("stroke", "none")
                 .attr("r", 4);
 
             gReloj.selectAll("circle.punto-finde")
                 .style("opacity", 0.7)
-                .style("fill", "#FF7043")
+                .style("fill", "#FBBF24") // Ámbar
                 .style("stroke", "none")
                 .attr("r", 3);
 
@@ -243,22 +241,20 @@ const graficaReloj = {
         };
 
         const handleMouseOver = (event, d) => {
-            // Atenuar elementos del fondo
             gReloj.selectAll(".estela").style("stroke-opacity", 0.03);
             gReloj.selectAll("circle.nodo").style("opacity", 0.15);
 
-            // Destacar estudiante activo
             const activeElements = gReloj.selectAll(`.estudiante-${d.id}`);
 
             activeElements.filter(".estela")
                 .style("stroke-opacity", 1)
                 .style("stroke-width", 2.8)
-                .style("stroke", "#FF5722")
+                .style("stroke", "#A855F7") // Púrpura Neón al pasar el cursor
                 .raise();
 
             activeElements.filter(".punto-semana")
                 .style("opacity", 1)
-                .style("fill", "#73BBA3")
+                .style("fill", "#818CF8") // Azul Lavanda
                 .attr("r", 6.5)
                 .style("stroke", "#FFFFFF")
                 .style("stroke-width", 1.5)
@@ -266,7 +262,7 @@ const graficaReloj = {
 
             activeElements.filter(".punto-finde")
                 .style("opacity", 1)
-                .style("fill", "#FF5722")
+                .style("fill", "#A855F7") // Púrpura Neón
                 .attr("r", 5.5)
                 .style("stroke", "#FFFFFF")
                 .style("stroke-width", 1.2)
@@ -274,11 +270,11 @@ const graficaReloj = {
 
             tooltip.style("visibility", "visible").style("opacity", 1)
                 .html(`
-                    <div style="font-weight: bold; font-size: 13px; color: #73BBA3; margin-bottom: 4px;">Estudiante #${d.id}</div>
+                    <div style="font-weight: bold; font-size: 13px; color: #818CF8; margin-bottom: 4px;">Estudiante #${d.id}</div>
                     <div><strong>Entre semana:</strong> ${formatHour(d.weekdayStart)}</div>
                     <div><strong>Fin de semana:</strong> ${formatHour(d.weekendStart)}</div>
                     <div><strong>Horas de sueño:</strong> ${d.sleepDuration} hrs</div>
-                    <div style="margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.15); color: #FF7043; font-weight: bold;">
+                    <div style="margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.15); color: #FBBF24; font-weight: bold;">
                         Desfase (Jetlag): ${d.jetlag} hrs
                     </div>
                 `);
@@ -290,10 +286,10 @@ const graficaReloj = {
                 .style("left", (event.pageX + 18) + "px");
         };
 
-        // --- F. NODOS Y PUNTOS (PUNTOS SOLIDOS Y CLAROS) ---
+        // --- F. NODOS Y PUNTOS ---
         const nodesGroup = gReloj.append("g").attr("class", "nodos");
 
-        // Puntos Entre Semana (Verdes bien visibles)
+        // Puntos Entre Semana (Azul Lavanda)
         nodesGroup.selectAll(".punto-semana")
             .data(parsedData)
             .enter()
@@ -302,14 +298,14 @@ const graficaReloj = {
             .attr("cx", d => d.x1)
             .attr("cy", d => d.y1)
             .attr("r", 4)
-            .attr("fill", "#73BBA3")
-            .style("opacity", 0.75) // Alta visibilidad sin necesidad de pasar el cursor
+            .attr("fill", "#818CF8") // Azul Lavanda
+            .style("opacity", 0.75)
             .style("cursor", "pointer")
             .on("mouseover", handleMouseOver)
             .on("mousemove", handleMouseMove)
             .on("mouseout", restaurarEstadoOriginal);
 
-        // Puntos Fin de Semana (Naranjas bien visibles)
+        // Puntos Fin de Semana (Ámbar)
         nodesGroup.selectAll(".punto-finde")
             .data(parsedData)
             .enter()
@@ -318,14 +314,13 @@ const graficaReloj = {
             .attr("cx", d => d.x2)
             .attr("cy", d => d.y2)
             .attr("r", 3)
-            .attr("fill", "#FF7043")
-            .style("opacity", 0.7) // Alta visibilidad
+            .attr("fill", "#FBBF24") // Ámbar
+            .style("opacity", 0.7)
             .style("cursor", "pointer")
             .on("mouseover", handleMouseOver)
             .on("mousemove", handleMouseMove)
             .on("mouseout", restaurarEstadoOriginal);
 
-        // Limpieza de seguridad si el cursor sale completamente del contenedor del reloj
         gReloj.on("mouseleave", restaurarEstadoOriginal);
     }
 };

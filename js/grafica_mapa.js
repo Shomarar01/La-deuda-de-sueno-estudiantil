@@ -53,14 +53,14 @@ const graficaMapa = (() => {
                 .attr("class", "tooltip-mapa")
                 .style("position", "absolute")
                 .style("pointer-events", "none")
-                .style("background", "#ffffff")
-                .style("color", "#1E1B4B")
-                .style("border", "1px solid #cccccc")
-                .style("border-radius", "10px")
-                .style("padding", "12px")
-                .style("font-family", "sans-serif")
-                .style("font-size", "13px")
-                .style("box-shadow", "0 4px 10px rgba(0,0,0,.18)")
+                .style("background", "rgba(18, 20, 36, 0.96)")
+                .style("color", "#FFFFFF")
+                .style("border", "1px solid rgba(255, 255, 255, 0.2)")
+                .style("border-radius", "8px")
+                .style("padding", "10px 14px")
+                .style("font-family", "system-ui, -apple-system, sans-serif")
+                .style("font-size", "12px")
+                .style("box-shadow", "0 8px 24px rgba(0,0,0,0.7)")
                 .style("opacity", 0)
                 .style("visibility", "hidden")
                 .style("z-index", 2000);
@@ -89,14 +89,15 @@ const graficaMapa = (() => {
         const tooltip = crearTooltip();
 
         // ----------------------------
-        // Escala de color
+        // Escala de color (Paleta personalizada)
         // ----------------------------
         const minHoras = d3.min(datos, d => d.hours);
         const maxHoras = d3.max(datos, d => d.hours);
+        const puntoMedio = (minHoras + maxHoras) / 2;
 
-        const escalaColor = d3.scaleSequential()
-            .domain([minHoras, maxHoras])
-            .interpolator(d3.interpolateRdYlGn);
+        const escalaColor = d3.scaleLinear()
+            .domain([minHoras, puntoMedio, maxHoras])
+            .range(["#FBBF24", "#A855F7", "#818CF8"]);
 
         // ----------------------------
         // Proyección
@@ -134,11 +135,11 @@ const graficaMapa = (() => {
                 const nombre = obtenerNombrePais(d);
                 const horas = indice.get(nombre);
                 if (horas == null) {
-                    return "#d9d9d9";
+                    return "#2A2F45"; // Gris-azul estético para países sin datos
                 }
                 return escalaColor(horas);
             })
-            .attr("stroke", "#ffffff")
+            .attr("stroke", "rgba(255, 255, 255, 0.2)")
             .attr("stroke-width", 0.5)
             .on("mouseover", function(event, d) {
                 const nombre = obtenerNombrePais(d);
@@ -147,17 +148,16 @@ const graficaMapa = (() => {
                 d3.select(this)
                     .transition()
                     .duration(150)
-                    .attr("stroke", "#222")
-                    .attr("stroke-width", 2);
+                    .attr("stroke", "#FFFFFF")
+                    .attr("stroke-width", 1.8);
 
-                // CORRECCIÓN CLAVE: Activar visibility explícitamente junto con opacity
                 tooltip
                     .style("visibility", "visible")
                     .style("opacity", 1);
 
                 if (horas == null) {
                     tooltip.html(`
-                        <strong>${nombre}</strong><br>
+                        <strong style="color: #94A3B8;">${nombre}</strong><br>
                         Sin información disponible
                     `);
                     return;
@@ -166,10 +166,10 @@ const graficaMapa = (() => {
                 const deficit = (8 - horas).toFixed(1);
 
                 tooltip.html(`
-                    <strong>${nombre}</strong>
-                    <hr style="margin:6px 0; border:0; border-top:1px solid #e2e8f0;">
-                    Horas promedio: <b>${horas.toFixed(1)} h</b><br><br>
-                    Déficit respecto a 8 h: <b>${deficit} h</b>
+                    <strong style="color: #818CF8; font-size: 13px;">${nombre}</strong>
+                    <hr style="margin:6px 0; border:0; border-top:1px solid rgba(255,255,255,0.15);">
+                    Horas promedio: <b>${horas.toFixed(1)} h</b><br>
+                    <span style="color: #FBBF24; font-weight: bold;">Déficit respecto a 8 h: ${deficit} h</span>
                 `);
             })
             .on("mousemove", function(event) {
@@ -181,10 +181,9 @@ const graficaMapa = (() => {
                 d3.select(this)
                     .transition()
                     .duration(150)
-                    .attr("stroke", "#ffffff")
+                    .attr("stroke", "rgba(255, 255, 255, 0.2)")
                     .attr("stroke-width", 0.5);
 
-                // CORRECCIÓN CLAVE: Ocultar con visibility y opacity en simultáneo
                 tooltip
                     .style("visibility", "hidden")
                     .style("opacity", 0);
@@ -205,15 +204,15 @@ const graficaMapa = (() => {
 
         gradient.append("stop")
             .attr("offset", "0%")
-            .attr("stop-color", escalaColor(minHoras));
+            .attr("stop-color", "#FBBF24");
 
         gradient.append("stop")
             .attr("offset", "50%")
-            .attr("stop-color", escalaColor((minHoras + maxHoras) / 2));
+            .attr("stop-color", "#A855F7");
 
         gradient.append("stop")
             .attr("offset", "100%")
-            .attr("stop-color", escalaColor(maxHoras));
+            .attr("stop-color", "#818CF8");
 
         const gLeyenda = gMapa.append("g")
             .attr("class", "leyenda-mapa")
@@ -221,13 +220,14 @@ const graficaMapa = (() => {
 
         gLeyenda.append("rect")
             .attr("width", 180)
-            .attr("height", 14)
+            .attr("height", 12)
             .attr("fill", "url(#gradiente-sueno)")
-            .attr("rx", 8);
+            .attr("rx", 6);
 
         gLeyenda.append("text")
             .attr("x", 0)
             .attr("y", -8)
+            .attr("fill", "rgba(255, 255, 255, 0.7)")
             .style("font-size", "11px")
             .text("Menos horas");
 
@@ -235,20 +235,25 @@ const graficaMapa = (() => {
             .attr("x", 180)
             .attr("y", -8)
             .attr("text-anchor", "end")
+            .attr("fill", "rgba(255, 255, 255, 0.7)")
             .style("font-size", "11px")
             .text("Más horas");
 
         gLeyenda.append("text")
             .attr("x", 0)
-            .attr("y", 30)
+            .attr("y", 26)
+            .attr("fill", "#FBBF24")
             .style("font-size", "11px")
+            .style("font-weight", "600")
             .text(minHoras.toFixed(1) + " h");
 
         gLeyenda.append("text")
             .attr("x", 180)
-            .attr("y", 30)
+            .attr("y", 26)
             .attr("text-anchor", "end")
+            .attr("fill", "#818CF8")
             .style("font-size", "11px")
+            .style("font-weight", "600")
             .text(maxHoras.toFixed(1) + " h");
     }
 
