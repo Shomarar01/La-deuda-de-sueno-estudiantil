@@ -1,9 +1,14 @@
+// --- 2. GRÁFICA DE BEESWARM CORREGIDA (graficaEfectoDomino.js) ---
+
 const graficaEfectoDomino = (function() {
     let simulacion;
 
-    function dibujar(contenedor, datosCrudos, ancho, alto) {
-        // --- 1. LIMPIEZA Y CLASIFICACIÓN ---
-        const datosLimpios = datosCrudos.map(d => {
+    // Recibe el dataset unificado, no los datosCrudos crudos de Mendeley
+    function dibujar(contenedor, datasetUnificado, ancho, alto) {
+        // --- 2.1 CÁLCULO INTERNO DE LOS CUADRANTES (Sin diffing) ---
+        // Procesamos los datos internos para la simulación de fuerzas
+        const datosLimpios = datasetUnificado.map(d => {
+            // Lógica de cálculo de cuadrantes (idéntica a la original)
             const pantallas = d["11. How often do you use electronic devices (e.g., phone, computer) before going to sleep?"] || "";
             const cafe = d["12. How often do you consume caffeine (coffee, energy drinks) to stay awake or alert?"] || "";
             const malosHabitos = (pantallas.includes("Often") || pantallas.includes("Every") || cafe.includes("Often") || cafe.includes("Every"));
@@ -23,7 +28,7 @@ const graficaEfectoDomino = (function() {
             else if (rend.includes("Good")) scoreRend = 4;
 
             return {
-                global_id: d.global_id, 
+                id: d.id, // ID propio de Mendeley (no combinado con otros archivos)
                 malosHabitos: malosHabitos,
                 scoreSuenio: scoreSuenio,
                 scoreRend: scoreRend,
@@ -31,13 +36,14 @@ const graficaEfectoDomino = (function() {
             };
         });
 
-        // --- 2. EJES SEGUROS ---
+        // --- 2.2 EJES Y TEXTOS (Idéntico a la original) ---
         contenedor.selectAll(".ejes").transition().duration(500).attr("opacity", 0).remove();
         contenedor.selectAll(".ejes-cuadrantes").remove();
 
-        const grupoEjes = contenedor.append("g").attr("class", "ejes-cuadrantes").attr("opacity", 0);
+        const grupoEjes = contenedor.append("g")
+            .attr("class", "ejes ejes-cuadrantes") 
+            .attr("opacity", 0);
         
-        // Declaramos cx y cy UNA SOLA VEZ
         const cx = ancho / 2;
         const cy = alto / 2;
 
@@ -61,7 +67,6 @@ const graficaEfectoDomino = (function() {
 
         grupoEjes.transition().duration(800).attr("opacity", 1);
 
-        // --- 3. SIMULACIÓN FÍSICA ---
         const paddingX = 140; 
         const paddingY = 120;
         const escalaX = d3.scaleLinear().domain([1, 5]).range([paddingX, ancho - paddingX]);
@@ -79,17 +84,19 @@ const graficaEfectoDomino = (function() {
 
         for (let i = 0; i < 150; i++) simulacion.tick();
 
+        // Guardamos las coordenadas calculadas en el dataset limpio para su uso posterior
         datosLimpios.forEach((d, i) => {
             d.destinoX = nodosSimulacion[i].x;
             d.destinoY = nodosSimulacion[i].y;
         });
 
-        // --- 4. EL MOTOR DE VUELO CORREGIDO ---
-        // Forzamos el ID a String para que D3 no pierda el rastro de ningún estudiante
-        const circulos = contenedor.selectAll(".estudiante").data(datosLimpios, d => String(d.global_id));
+        // --- 2.3 MOTOR DE UNIFICACIÓN (REUTILIZACIÓN DE CÍRCULOS) ---
+        // Usamos la llave 'id' (propia de Mendeley) para conservar identidad dentro de la escena
+        const circulos = contenedor.selectAll(".estudiante")
+            .data(datosLimpios, d => String(d.id)); // Forzamos texto estricto
 
         circulos.join(
-            // NUEVOS PUNTOS
+            // Círculos Nuevos (No debería haber si unificamos bien)
             enter => enter.append("circle")
                 .attr("class", "estudiante")
                 .attr("cx", cx).attr("cy", cy).attr("r", 0)
@@ -101,21 +108,21 @@ const graficaEfectoDomino = (function() {
                     .attr("opacity", 0.9)
                 ),
             
-            // PUNTOS EXISTENTES (El viaje real)
+            // Círculos Existentes (EL VIAJE) - Esto es lo que recuperamos
             update => update
-                .call(update => update.interrupt().transition().duration(1000).ease(d3.easeCubicInOut)
+                .call(update => update.transition().duration(1000).ease(d3.easeCubicInOut)
                     .attr("cx", d => d.destinoX)
                     .attr("cy", d => d.destinoY)
-                    .attr("r", d => d.radius)
+                    .attr("r", d => d.radius) // Actualizamos tamaño si es necesario
                     .attr("fill", d => d.malosHabitos ? "#FB7185" : "#34D399")
-                    .attr("stroke", "none")
+                    .attr("stroke", "none") // Limpiamos bordes previos
                     .attr("opacity", 0.9)
                 ),
             
-            // PUNTOS SOBRANTES
-            exit => exit.interrupt().transition().duration(500).attr("r", 0).remove()
+            exit => exit.transition().duration(500).attr("r", 0).remove()
         );
 
+        // Mandamos los puntos al frente para la leyenda
         contenedor.selectAll(".estudiante").raise();
     }
 

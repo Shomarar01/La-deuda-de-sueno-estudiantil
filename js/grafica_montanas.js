@@ -1,6 +1,29 @@
 const graficaMontanas = (function() {
     let simulacion;
 
+    // --- TOOLTIP GLOBAL SEGURO ---
+    function crearTooltip() {
+        let tooltip = d3.select("body").select(".tooltip-global");
+        if (tooltip.empty()) {
+            tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip-global")
+                .style("position", "absolute")
+                .style("pointer-events", "none")
+                .style("background", "#ffffff")
+                .style("color", "#1E1B4B")
+                .style("border", "1px solid #cccccc")
+                .style("border-radius", "8px")
+                .style("padding", "10px")
+                .style("font-family", "Inter, sans-serif")
+                .style("font-size", "13px")
+                .style("box-shadow", "0 4px 10px rgba(0,0,0,.1)")
+                .style("opacity", 0)
+                .style("visibility", "hidden")
+                .style("z-index", 2000);
+        }
+        return tooltip;
+    }
+
     function dibujar(contenedor, datos, ancho, alto) {
         // --- 1. ESCALAS ---
         const datosLimpios = datos.filter(d => d.siestas_min !== undefined && d.Carga_academica);
@@ -13,7 +36,7 @@ const graficaMontanas = (function() {
         
         const escalaColor = d3.scaleThreshold().domain([7]).range(["#FB7185", "#34D399"]);
 
-        // --- 2. TRANSICIONES DE EJES ---
+        // --- 2. TRANSICIONES DE EJES Y LEYENDA ---
         contenedor.selectAll(".ejes").remove();
         const grupoEjes = contenedor.append("g").attr("class", "ejes").attr("opacity", 0);
 
@@ -39,10 +62,32 @@ const graficaMontanas = (function() {
             .attr("x1", 0).attr("x2", ancho).attr("y1", d => escalaY(d) + 5).attr("y2", d => escalaY(d) + 5)
             .attr("stroke", "rgba(99, 102, 241, 0.2)");
 
+        // --- LEYENDA EXPLICATIVA DE COLORES (NUEVO) ---
+        const gLeyenda = grupoEjes.append("g")
+            .attr("class", "leyenda-sueno")
+            .attr("transform", `translate(${ancho - 280}, -25)`);
+
+        // Indicador Rojo (< 7h)
+        gLeyenda.append("circle")
+            .attr("cx", 0).attr("cy", 0).attr("r", 5)
+            .attr("fill", "#FB7185");
+        gLeyenda.append("text")
+            .attr("x", 10).attr("y", 4)
+            .attr("fill", "#94A3B8").style("font-size", "12px").style("font-family", "Inter")
+            .text("< 7h sueño nocturno");
+
+        // Indicador Verde (>= 7h)
+        gLeyenda.append("circle")
+            .attr("cx", 140).attr("cy", 0).attr("r", 5)
+            .attr("fill", "#34D399");
+        gLeyenda.append("text")
+            .attr("x", 150).attr("y", 4)
+            .attr("fill", "#94A3B8").style("font-size", "12px").style("font-family", "Inter")
+            .text("≥ 7h sueño nocturno");
+
         grupoEjes.transition().duration(800).attr("opacity", 1);
 
         // --- 3. CÁLCULO DE POSICIONES FINALES (MONTAÑAS) ---
-        // Creamos nodos temporales para calcular dónde deben terminar las burbujas
         const nodosSimulacion = datosLimpios.map(d => Object.assign({}, d));
 
         if (simulacion) simulacion.stop();
@@ -55,17 +100,17 @@ const graficaMontanas = (function() {
 
         for (let i = 0; i < 120; i++) simulacion.tick();
 
-        // Guardamos las coordenadas calculadas (destinoX, destinoY) directamente en cada objeto de datos original
         datosLimpios.forEach((d, i) => {
             d.destinoX = nodosSimulacion[i].x;
             d.destinoY = nodosSimulacion[i].y;
             d.radius = 4.5;
         });
 
-        // --- 4. MOTOR DE VUELO FLUIDO (Constancia de Objetos Real) ---
-        const circulos = contenedor.selectAll(".estudiante").data(datosLimpios, d => d.global_id);
+        // --- 4. MOTOR DE VUELO FLUIDO ---
+        const tooltip = crearTooltip();
+        const circulos = contenedor.selectAll(".estudiante").data(datosLimpios, d => d.id);
 
-        circulos.join(
+        const todosLosPuntos = circulos.join(
             enter => enter.append("circle")
                 .attr("class", "estudiante")
                 .attr("cx", ancho / 2).attr("cy", alto / 2).attr("r", 0)
@@ -77,15 +122,14 @@ const graficaMontanas = (function() {
                     .attr("r", d => d.radius)
                 ),
             
-            // ¡Aquí es donde ocurre el viaje físico desde las burbujas hacia las montañas!
             update => update
                 .call(update => update.transition()
                     .duration(1000)
                     .ease(d3.easeCubicInOut)
-                    .delay((d, i) => i * 0.5) // Retraso escalonado para que parezca un enjambre volando
-                    .attr("cx", d => d.destinoX) // Vuelan a la coordenada X de la siesta
-                    .attr("cy", d => d.destinoY) // Vuelan a la coordenada Y de su carga académica
-                    .attr("r", d => d.radius)    // Se desinflan del tamaño de burbuja a un punto normal
+                    .delay((d, i) => i * 0.5)
+                    .attr("cx", d => d.destinoX)
+                    .attr("cy", d => d.destinoY)
+                    .attr("r", d => d.radius)
                     .attr("fill", d => escalaColor(d.TotalSleepTime_Horas))
                     .attr("stroke", "none")
                     .attr("opacity", 0.9)
@@ -93,7 +137,47 @@ const graficaMontanas = (function() {
             
             exit => exit.transition().duration(500).attr("r", 0).remove()
         );
-        
+
+        // --- INTERACTIVIDAD ROBUSTA (NUEVO) ---
+        todosLosPuntos
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this).raise();
+
+                contenedor.selectAll(".estudiante").transition("foco").duration(150).attr("opacity", 0.2);
+
+                d3.select(this).transition("foco").duration(150)
+                    .attr("opacity", 1)
+                    .attr("stroke", "#FFFFFF")
+                    .attr("stroke-width", 2);
+
+                const estadoSueno = d.TotalSleepTime_Horas < 7 ? "Déficit de sueño" : "Sueño suficiente";
+
+                tooltip
+                    .style("visibility", "visible")
+                    .style("opacity", 1)
+                    .html(`
+                        <strong>Estudiante #${d.id}</strong><hr style="margin:4px 0; border:0; border-top:1px solid #e2e8f0;">
+                        Carga Académica: <b>${d.Carga_academica}</b><br>
+                        Siesta: <b>${d.siestas_min} min</b><br>
+                        Sueño nocturno: <b>${d.TotalSleepTime_Horas} h</b> (${estadoSueno})
+                    `);
+            })
+            .on("mousemove", function(event) {
+                tooltip
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 25) + "px");
+            })
+            .on("mouseout", function() {
+                contenedor.selectAll(".estudiante").transition("foco").duration(150)
+                    .attr("opacity", 0.9)
+                    .attr("stroke", "none");
+
+                tooltip
+                    .style("visibility", "hidden")
+                    .style("opacity", 0);
+            });
+            
         contenedor.selectAll(".estudiante").raise();
     }
 
