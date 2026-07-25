@@ -1,12 +1,4 @@
-
 // --- VARIABLES GLOBALES ---
-// Cada dataset se queda por separado (SIN combinar CSV entre sí).
-// La "constancia de objetos" solo aplica entre escenas que comparten
-// el MISMO archivo de origen real:
-//   - Kaggle    -> Escena 1 (enjambre) y Escena 2 (reloj)
-//   - CMU       -> Escena 3 (burbujas) y Escena 4 (montañas)
-//   - Mendeley  -> Escena 5 (cuadrantes), sola
-//   - Mundial   -> Escena 0 (mapa), sola
 let datosKaggle, datosCMU, datosMendeley, datosMundiales, geojsonMundo;
 let svgPrincipal, grupoPrincipal;
 let ancho, alto;
@@ -22,9 +14,7 @@ Promise.all([
     d3.json("datasetsProyecto/countries.geojson")
 ]).then(function(archivos) {
 
-    // --- 1. KAGGLE (Escenas 1 y 2) ---
-    // Student_ID es un identificador real dentro de este archivo:
-    // lo usamos como llave de constancia de objetos entre reloj y enjambre.
+    // KAGGLE 
     datosKaggle = archivos[0]
         .filter(d => d.Sleep_Duration && d.University_Year)
         .map(d => ({
@@ -35,11 +25,7 @@ Promise.all([
             Weekend_Sleep_Start: +d.Weekend_Sleep_Start
         }));
 
-    // --- 2. CMU (Escenas 3 y 4) ---
-    // Este archivo no trae un ID de estudiante, así que usamos la posición
-    // de la fila DENTRO del propio archivo como identificador (no se mezcla
-    // con ningún otro dataset, solo nos sirve para reconocer la fila entre
-    // burbujas y montañas).
+    //CMU
     datosCMU = archivos[1]
         .filter(d => d.TotalSleepTime_Horas && d.gpa_promedio)
         .map((d, i) => ({
@@ -52,28 +38,27 @@ Promise.all([
             Carga_academica: d.Carga_academica
         }));
 
-    // --- 3. MENDELEY (Escena 5, no viaja a ninguna otra escena) ---
+    // MENDELEY 
     datosMendeley = archivos[2].map((d, i) => ({
         ...d,
         id: String(i)
     }));
 
-    // --- 4. MUNDIAL (Escena 0, mapa) ---
+    //  MUNDIAL
     datosMundiales = archivos[3].map(d => ({
         country: d.country,
         hours: +d.Hours
     }));
     geojsonMundo = archivos[4];
 
-    console.log("Datasets cargados por separado:", { datosKaggle, datosCMU, datosMendeley, datosMundiales });
+    console.log("Datasets cargados y listos.");
 
     inicializarLienzo();
     iniciarScrollama();
 
 }).catch(function(error) {
-    console.error("Error cargando los archivos:", error);
+    console.error("Error crítico cargando los archivos:", error);
 });
-
 
 function inicializarLienzo() {
     const contenedor = d3.select("#lienzo-d3").node();
@@ -96,7 +81,7 @@ function iniciarScrollama() {
         .setup({
             step: "#scrolly article .step",
             offset: 0.5,
-            debug: false 
+            debug: false
         })
         .onStepEnter(manejarEntradaEscena);
 
@@ -104,24 +89,18 @@ function iniciarScrollama() {
 }
 
 function manejarEntradaEscena(respuesta) {
-    //Recien añadido
-    d3.selectAll(".reloj-tooltip, .tooltip-global, .tooltip-mapa")
-    .style("visibility", "hidden")
-    .style("opacity", 0);
     d3.selectAll(".step").classed("is-active", false);
     d3.select(respuesta.element).classed("is-active", true);
 
     const pasoActual = respuesta.element.getAttribute("data-step");
 
-    // 1. Ocultar tooltips residuales
     d3.selectAll(".reloj-tooltip, .tooltip-global, .tooltip-mapa")
         .style("visibility", "hidden")
         .style("opacity", 0);
 
-    // 2. REGLA DE ORO: Cancelar animaciones y LIMPIAR TODO el grupo principal
     grupoPrincipal.selectAll("*").interrupt().remove();
 
-    // 3. Renderizar únicamente la escena correspondiente
+
     if (pasoActual === "0") {
         graficaMapa.dibujar(grupoPrincipal, geojsonMundo, datosMundiales, ancho, alto);
     } else if (pasoActual === "1") {

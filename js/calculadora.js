@@ -1,17 +1,43 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Referencias a los inputs
+
+    document.querySelectorAll('.input-caja').forEach(caja => {
+        caja.addEventListener('click', function() {
+            // esto despliega el reloj del navegador al dar clic en cualquier parte de la caja
+            this.querySelector('input[type="time"]').showPicker();
+        });
+    });
+
+    // ---ESTADO DE LOS BOTONES ---
+    let usaPantallas = false;
+    let usaCafe = false;
+
+    const btnPantallas = document.getElementById("btn-pantallas");
+    const btnCafe = document.getElementById("btn-cafe");
+
+    btnPantallas.addEventListener("click", function() {
+        usaPantallas = !usaPantallas;
+        this.classList.toggle("activo");
+        actualizarCalculadora();
+    });
+
+    btnCafe.addEventListener("click", function() {
+        usaCafe = !usaCafe;
+        this.classList.toggle("activo");
+        actualizarCalculadora();
+    });
+
+    // --- INPUTS Y OUTPUTS ---
     const inDormir = document.getElementById("calc-dormir");
     const inDespertar = document.getElementById("calc-despertar");
     const inDormirFin = document.getElementById("calc-dormir-fin");
-    const inHabitos = document.getElementById("calc-habitos");
 
-    // Referencias a los outputs
     const outHoras = document.getElementById("out-horas");
+    const outJetlag = document.getElementById("out-jetlag");
     const outCalidad = document.getElementById("out-calidad");
     const outRendimiento = document.getElementById("out-rendimiento");
     const outMensaje = document.getElementById("out-mensaje");
 
-    // Función auxiliar para convertir "HH:MM" a horas decimales
+    // --- MOTOR PREDICTIVO ---
     function timeToDecimal(timeStr) {
         const [hours, minutes] = timeStr.split(':').map(Number);
         return hours + (minutes / 60);
@@ -21,63 +47,65 @@ document.addEventListener("DOMContentLoaded", function() {
         const hDormir = timeToDecimal(inDormir.value);
         const hDespertar = timeToDecimal(inDespertar.value);
         const hDormirFin = timeToDecimal(inDormirFin.value);
-        const malosHabitos = inHabitos.checked;
 
-        // 1. Calcular Duración (Regla Kaggle/CMU)
         let duracion = hDespertar - hDormir;
-        if (duracion < 0) duracion += 24;
+        if (duracion < 0) duracion += 24; 
         
         const hrs = Math.floor(duracion);
         const mins = Math.round((duracion - hrs) * 60);
-        outHoras.innerText = `${hrs}h ${mins}m`;
-
         const deudaSueno = duracion < 7;
 
-        // 2. Calcular Jetlag Social (Desfase entre semana y fin de semana)
         let desfase = Math.abs(hDormirFin - hDormir);
         if (desfase > 12) desfase = 24 - desfase;
-        
-        const caosCircadiano = desfase >= 2; // Jetlag severo
+        const jetlagGrave = desfase >= 2;
 
-        // 3. Evaluar Calidad y Rendimiento
-        let calidad = "Buena";
-        let rendimiento = "Alto / Excelente";
-        let mensaje = "Estás dentro del 7% de estudiantes con hábitos protectores. Tu reloj biológico está alineado para el éxito académico.";
-        let claseColor = "texto-verde";
+        let calidad = "Saludable";
+        let rendimiento = "Alto Rendimiento";
+        let mensaje = "Estás dentro de la minoría de estudiantes con hábitos protectores, tu reloj biológico está alineado para el éxito.";
+        let colorEstado = "var(--color-lavanda)";
 
-        if (malosHabitos) {
+        // Penalizaciones por hábitos de riesgo
+        if (usaPantallas && usaCafe) {
+            calidad = "Crítica";
+            rendimiento = "Fracaso Escolar";
+            mensaje = "Combinar pantallas y cafeína bloquea tu melatonina y genera micro-despertares (Mendeley Data); tu retención de memoria es casi nula.";
+            colorEstado = "var(--color-coral)"; 
+        } else if (usaPantallas || usaCafe) {
             calidad = "Deficiente";
-            rendimiento = "Bajo / En Riesgo";
-            mensaje = "El uso nocturno de pantallas/café bloquea tu melatonina (Mendeley Data). Tu sueño es superficial y perjudica tu memoria a corto plazo.";
-            claseColor = "texto-rojo";
-        } else if (caosCircadiano) {
+            rendimiento = "Bajo Promedio";
+            mensaje = "El desvelo inducido por estimulantes o luz azul superficializa tu descanso, es un ancla para tu rendimiento.";
+            colorEstado = "var(--color-ambar)";
+        } else if (jetlagGrave) {
             calidad = "Regular";
-            rendimiento = "Promedio / Bajo";
-            mensaje = `Tienes un Jetlag Social de ${desfase.toFixed(1)} horas. Estás destrozando tu ciclo circadiano el fin de semana, lo que hunde tu promedio académico (Kaggle/CMU Data).`;
-            claseColor = "texto-rojo";
+            rendimiento = "Bajo Promedio";
+            mensaje = `Tienes un <span class="glosario-jetlag" data-tooltip="Diferencia de horas de sueño entre la semana y el sábado.">Jetlag social</span> de ${desfase.toFixed(1)} horas, estás destrozando tu ciclo circadiano el fin de semana, lo que hunde tu promedio.`;
+            colorEstado = "var(--color-ambar)";
         } else if (deudaSueno) {
             calidad = "Regular";
-            rendimiento = "Promedio / En Riesgo";
-            mensaje = "Tu duración de sueño es insuficiente (< 7h). El Modo Supervivencia (siestas diurnas) no bastará para mantener calificaciones de excelencia.";
-            claseColor = "texto-rojo";
+            rendimiento = "En Riesgo";
+            mensaje = "Tu duración de sueño es insuficiente (< 7h), entrarás en modo supervivencia (siestas diurnas) y tu cognición bajará.";
+            colorEstado = "var(--color-ambar)";
         }
 
-        // Actualizar UI
-        outCalidad.innerText = calidad;
-        outRendimiento.innerText = rendimiento;
-        outMensaje.innerText = mensaje;
+        // --- ACTUALIZAR INTERFAZ ---
+        outHoras.innerText = `${hrs}h ${mins}m`;
+        outHoras.style.color = deudaSueno ? "var(--color-ambar)" : "var(--color-lavanda)";
 
-        // Aplicar estilos de color
-        outCalidad.className = claseColor;
-        outRendimiento.className = claseColor;
-        outHoras.className = deudaSueno ? "texto-rojo" : "texto-verde";
+        outJetlag.innerText = `${desfase.toFixed(1)}h`;
+        outJetlag.style.color = jetlagGrave ? "var(--color-ambar)" : "var(--texto-principal)";
+
+        outCalidad.innerText = calidad;
+        outCalidad.style.color = colorEstado;
+
+        outRendimiento.innerText = rendimiento;
+        outRendimiento.style.color = colorEstado;
+
+        outMensaje.innerHTML = mensaje;
     }
 
-    // Escuchar eventos de cambio en tiempo real
-    [inDormir, inDespertar, inDormirFin, inHabitos].forEach(input => {
+    [inDormir, inDespertar, inDormirFin].forEach(input => {
         input.addEventListener("input", actualizarCalculadora);
     });
 
-    // Inicializar con los valores por defecto
     actualizarCalculadora();
 });
