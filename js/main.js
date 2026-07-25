@@ -6,6 +6,7 @@ const margen = { arriba: 60, derecha: 40, abajo: 80, izquierda: 80 };
 
 const scroller = scrollama();
 
+// --- CARGA DE DATOS ---
 Promise.all([
     d3.csv("datasetsProyecto/kaggle.csv"),
     d3.csv("datasetsProyecto/cmu.csv"),
@@ -55,10 +56,15 @@ Promise.all([
 
     inicializarLienzo();
     iniciarScrollama();
+    
+    // Iniciar la animación de la portada una vez que todo está cargado
+    if (typeof animacionPortada !== 'undefined') animacionPortada.iniciar(); // <--- LÍNEA NUEVA
 
 }).catch(function(error) {
     console.error("Error crítico cargando los archivos:", error);
 });
+
+// --- FUNCIONES DE INICIALIZACIÓN ---
 
 function inicializarLienzo() {
     const contenedor = d3.select("#lienzo-d3").node();
@@ -83,10 +89,35 @@ function iniciarScrollama() {
             offset: 0.5,
             debug: false
         })
-        .onStepEnter(manejarEntradaEscena);
-
+        .onStepEnter(manejarEntradaEscena) // CORREGIDO: Quitado el punto y coma ';'
+        .onStepExit(respuesta => {
+            // Si salimos de la gráfica 0 (el mapa) hacia ARRIBA, vuelve a meter los puntos
+            if (respuesta.index === 0 && respuesta.direction === 'up') {
+                if (typeof animacionPortada !== 'undefined') animacionPortada.entrar(); // <--- LÍNEA NUEVA
+            }
+        });
+        
     window.addEventListener("resize", scroller.resize);
 }
+
+// --- LÓGICA BOTÓN SUBIR (Movido fuera para que se ejecute una sola vez) ---
+const btnSubir = document.getElementById("btn-subir");
+if (btnSubir) {
+    window.addEventListener("scroll", () => {
+        //después de bajar 500px
+        if (window.scrollY > 500) {
+            btnSubir.classList.add("mostrar");
+        } else {
+            btnSubir.classList.remove("mostrar");
+        }
+    });
+
+    btnSubir.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// --- MANEJO DE ESCENAS ---
 
 function manejarEntradaEscena(respuesta) {
     d3.selectAll(".step").classed("is-active", false);
@@ -94,14 +125,17 @@ function manejarEntradaEscena(respuesta) {
 
     const pasoActual = respuesta.element.getAttribute("data-step");
 
+    // Ocultar tooltips
     d3.selectAll(".reloj-tooltip, .tooltip-global, .tooltip-mapa")
         .style("visibility", "hidden")
         .style("opacity", 0);
 
+    // Limpieza absoluta de la gráfica anterior
     grupoPrincipal.selectAll("*").interrupt().remove();
 
-
+    // Renderizar la escena solicitada
     if (pasoActual === "0") {
+        if (typeof animacionPortada !== 'undefined') animacionPortada.salir(); // <--- LÍNEA NUEVA
         graficaMapa.dibujar(grupoPrincipal, geojsonMundo, datosMundiales, ancho, alto);
     } else if (pasoActual === "1") {
         graficaEnjambre.dibujar(grupoPrincipal, datosKaggle, ancho, alto);

@@ -20,6 +20,8 @@
         <h1>La deuda de sueño:<br><span>Hábitos y rendimiento universitario</span></h1>
         <p>Un reportaje visual que demuestra por qué el desvelo no es un trofeo, sino el ancla que hunde tus calificaciones.</p>
         <p class="instruccion">Desliza para explorar los datos ↓</p>
+        <!-- Contenedor para los puntos animados -->
+        <div id="animacion-portada" style="position: absolute; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none; overflow: hidden;"></div>
     </header>
 
     <!-- ZONA 1: SCROLLYTELLING -->
@@ -165,6 +167,12 @@
         <p>Licenciatura en Tecnologías y Sistemas de Información, UAM Cuajimalpa (2026)</p>
         <p class="creditos">Desarrollado por Zury Elizabeth Bautista Baez y Shomara Berenice Rivera Huerta.</p>
     </footer>
+
+    <!-- botón regesar arriba -->
+    <button id="btn-subir" title="Regresar al inicio">
+        ↑
+    </button>
+
     <!-- SCRIPTS  -->
     <script src="js/grafica_mapa.js"></script>
     <script src="js/grafica_enjambre.js"></script>
@@ -173,6 +181,14 @@
     <script src="js/grafica_montanas.js"></script>
     <script src="js/grafica_cuadrantes.js"></script>
     <script src="js/calculadora.js"></script>
+    <!-- LÍNEA CORREGIDA ↓ (Había que agregar este script antes de main.js) -->
+    <script src="js/animacion_portada.js"></script>
     <script src="js/main.js"></script>
+
 </body>
+<div id="alerta-movil">
+    <h1>Visualización no optimizada para móviles</h1>
+    <p>Este reportaje interactivo contiene simulaciones de datos en tiempo real.</p>
+    <p>Por favor, <strong>abre este enlace en una computadora de escritorio o laptop</strong> para disfrutar de la experiencia completa.</p>
+</div>
 </html>

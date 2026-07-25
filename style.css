@@ -373,3 +373,72 @@ footer {
 }
 footer p { color: var(--texto-secundario); font-size: 0.85rem; margin-bottom: 5px; }
 footer .creditos { color: #fff; font-weight: 500; margin-top: 10px; letter-spacing: 0.5px; }
+
+/* =========================================
+   BOTÓN REGRESAR AL INICIO
+   ========================================= */
+#btn-subir {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: #818CF8; /* Lavanda */
+    color: #121424; /* Fondo oscuro */
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    opacity: 0; /* Oculto por defecto */
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#btn-subir.mostrar {
+    opacity: 1;
+    visibility: visible;
+}
+
+#btn-subir:hover {
+    background: #FBBF24; /* Cambia a Ámbar al pasar el mouse */
+    transform: translateY(-3px);
+}
+
+/* =========================================
+  no sirve en moviles xd
+   ========================================= */
+#alerta-movil {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    /* quitamos todo el contenido de la página */
+    body > * {
+        display: none !important;
+    }
+
+    /* mostramos solo la alerta */
+    #alerta-movil {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #121424;
+        color: #FFFFFF;
+        text-align: center;
+        padding: 30px;
+        font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    #alerta-movil h1 {
+        color: #818CF8;
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+}

@@ -38,7 +38,7 @@ const graficaBurbujas = (function() {
 
         const ejeY = d3.axisLeft(escalaY).ticks(6);
         grupoEjes.append("g").call(ejeY).attr("color", "#94A3B8").style("font-size", "12px");
-        grupoEjes.append("text").attr("transform", "rotate(-90)").attr("y", -45).attr("x", -(alto / 2)).attr("fill", "#94A3B8").style("font-size", "13px").style("text-anchor", "middle").text("Promedio Académico (0 - 10)");
+        grupoEjes.append("text").attr("transform", "rotate(-90)").attr("y", -45).attr("x", -(alto / 2)).attr("fill", "#94A3B8").style("font-size", "13px").style("text-anchor", "middle").text("Promedio académico (0 - 10)");
 
         grupoEjes.transition().duration(600).attr("opacity", 1);
 

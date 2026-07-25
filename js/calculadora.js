@@ -60,29 +60,29 @@ document.addEventListener("DOMContentLoaded", function() {
         const jetlagGrave = desfase >= 2;
 
         let calidad = "Saludable";
-        let rendimiento = "Alto Rendimiento";
+        let rendimiento = "Alto rendimiento";
         let mensaje = "Estás dentro de la minoría de estudiantes con hábitos protectores, tu reloj biológico está alineado para el éxito.";
         let colorEstado = "var(--color-lavanda)";
 
         // Penalizaciones por hábitos de riesgo
         if (usaPantallas && usaCafe) {
             calidad = "Crítica";
-            rendimiento = "Fracaso Escolar";
+            rendimiento = "Fracaso escolar";
             mensaje = "Combinar pantallas y cafeína bloquea tu melatonina y genera micro-despertares (Mendeley Data); tu retención de memoria es casi nula.";
             colorEstado = "var(--color-coral)"; 
         } else if (usaPantallas || usaCafe) {
             calidad = "Deficiente";
-            rendimiento = "Bajo Promedio";
+            rendimiento = "Bajo promedio";
             mensaje = "El desvelo inducido por estimulantes o luz azul superficializa tu descanso, es un ancla para tu rendimiento.";
             colorEstado = "var(--color-ambar)";
         } else if (jetlagGrave) {
             calidad = "Regular";
-            rendimiento = "Bajo Promedio";
+            rendimiento = "Bajo promedio";
             mensaje = `Tienes un <span class="glosario-jetlag" data-tooltip="Diferencia de horas de sueño entre la semana y el sábado.">Jetlag social</span> de ${desfase.toFixed(1)} horas, estás destrozando tu ciclo circadiano el fin de semana, lo que hunde tu promedio.`;
             colorEstado = "var(--color-ambar)";
         } else if (deudaSueno) {
             calidad = "Regular";
-            rendimiento = "En Riesgo";
+            rendimiento = "En riesgo";
             mensaje = "Tu duración de sueño es insuficiente (< 7h), entrarás en modo supervivencia (siestas diurnas) y tu cognición bajará.";
             colorEstado = "var(--color-ambar)";
         }
