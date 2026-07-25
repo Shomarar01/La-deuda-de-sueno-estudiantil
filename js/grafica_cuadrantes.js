@@ -4,8 +4,22 @@ const graficaEfectoDomino = (function() {
     const COLOR_AMBAR = "#FBBF24";       // Pantallas + Cafeína
     const COLOR_LAVANDA = "#818CF8";     // Hábitos saludables
 
+    function crearTooltip() {
+        let tooltip = d3.select("body").select(".tooltip-global");
+        if (tooltip.empty()) {
+            tooltip = d3.select("body").append("div").attr("class", "tooltip-global")
+                .style("position", "absolute").style("pointer-events", "none")
+                .style("background", "rgba(18, 20, 36, 0.96)").style("color", "#FFFFFF")
+                .style("border", "1px solid rgba(255, 255, 255, 0.2)").style("border-radius", "8px")
+                .style("padding", "10px 14px").style("font-family", "system-ui, sans-serif")
+                .style("font-size", "12px").style("box-shadow", "0 8px 24px rgba(0,0,0,0.7)")
+                .style("opacity", 0).style("visibility", "hidden").style("z-index", 2000);
+        }
+        return tooltip;
+    }
+
     function dibujar(contenedor, datosCrudos, ancho, alto) {
-        
+
         // datos Mendeley
         const datosLimpios = datosCrudos.map(d => {
             const pantallas = d["11. How often do you use electronic devices (e.g., phone, computer) before going to sleep?"] || "";
@@ -23,7 +37,7 @@ const graficaEfectoDomino = (function() {
             return { global_id: String(d.id), malosHabitos: malosHabitos, scoreSuenio: scoreSuenio, scoreRend: scoreRend, radius: 4.5 };
         });
 
-        //ejes
+        // ejes
         contenedor.selectAll(".ejes-cuadrantes").remove();
         const grupoEjes = contenedor.append("g").attr("class", "ejes-cuadrantes").attr("opacity", 1);
         const cx = ancho / 2;
@@ -64,7 +78,8 @@ const graficaEfectoDomino = (function() {
         for (let i = 0; i < 150; i++) simulacion.tick();
         datosLimpios.forEach((d, i) => { d.destinoX = nodosSimulacion[i].x; d.destinoY = nodosSimulacion[i].y; });
 
-        // 4 extremos con requestAnimationFrame
+
+        const tooltip = crearTooltip();
         const circulos = contenedor.selectAll(".estudiante").data(datosLimpios, d => String(d.global_id));
 
         circulos.exit().transition().duration(400).attr("r", 0).remove();
@@ -88,6 +103,32 @@ const graficaEfectoDomino = (function() {
             .attr("fill", d => d.malosHabitos ? COLOR_AMBAR : COLOR_LAVANDA);
 
         const allCircles = enterCircles.merge(circulos);
+
+        // hover
+        allCircles.style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this).raise();
+                contenedor.selectAll(".estudiante").transition("foco").duration(150).attr("opacity", 0.15);
+                d3.select(this).transition("foco").duration(150).attr("opacity", 1).attr("stroke", "#FFFFFF").attr("stroke-width", 2);
+
+                // cuadrantes
+                const textoRend = d.scoreRend > 3 ? "Alto Rendimiento" : "Bajo Rendimiento";
+                const textoSuenio = d.scoreSuenio > 3 ? "Buen Sueño" : "Mal Sueño";
+                const textoHabitos = d.malosHabitos ? "Usa pantallas/toma café" : "Hábitos sanos";
+                const colorHex = d.malosHabitos ? COLOR_AMBAR : COLOR_LAVANDA;
+
+                tooltip.style("visibility", "visible").style("opacity", 1).html(`
+                    <strong style="color: ${colorHex}; font-size: 13px;">Estudiante #${d.global_id}</strong>
+                    <hr style="margin:6px 0; border:0; border-top:1px solid rgba(255,255,255,0.15);">
+                    Cuadrante: <b>${textoRend} y ${textoSuenio}</b><br>
+                    Rutina: <span style="color: ${colorHex}; font-weight: 600;">${textoHabitos}</span>
+                `);
+            })
+            .on("mousemove", e => tooltip.style("left", (e.pageX + 16) + "px").style("top", (e.pageY - 20) + "px"))
+            .on("mouseout", function() {
+                contenedor.selectAll(".estudiante").transition("foco").duration(150).attr("opacity", 0.9).attr("stroke", "none");
+                tooltip.style("visibility", "hidden").style("opacity", 0);
+            });
 
         requestAnimationFrame(() => {
             allCircles.transition().duration(1200)
