@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Plataforma de Bienestar</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="body-auth">
+
+    <div class="registro-contenedor">
+        <h2>Crear Cuenta</h2>
+        <p class="subtitulo">Únete al Sistema de <span>Alerta Temprana</span></p>
+
+        <form id="formRegistro">
+            <div class="grupo">
+                <label for="usuario">Matrícula / Nombre de usuario <span class="req">*</span></label>
+                <input type="text" id="usuario" placeholder="Ej. 219304" required>
+                <!--  error de usuario -->
+                <div id="errorUsuario" class="mensaje-error"></div>
+            </div>
+
+            <div class="grupo">
+                <label for="password">Contraseña <span class="req">*</span></label>
+                <input type="password" id="password" placeholder="Crea una contraseña segura" required>
+            </div>
+
+            <div class="grupo">
+                <label for="confirmPassword">Confirmar Contraseña <span class="req">*</span></label>
+                <input type="password" id="confirmPassword" placeholder="Repite tu contraseña" required>
+                <!--error de contraseña -->
+                <div id="mensajeError" class="mensaje-error"></div>
+            </div>
+
+            <button type="submit" id="btnEnviar" disabled>Completar Registro</button>
+        </form>
+
+        <a href="login.html" class="link-login">¿Ya tienes cuenta? Inicia sesión aquí</a>
+    </div>
+
+    <!-- LÓGICA DE VALIDACIÓN UX -->
+    <script>
+        const inputUsuario = document.getElementById("usuario");
+        const errorUsuario = document.getElementById("errorUsuario");
+        
+        const inputPass = document.getElementById("password");
+        const inputConfirm = document.getElementById("confirmPassword");
+        const mensajeError = document.getElementById("mensajeError");
+        
+        const btnEnviar = document.getElementById("btnEnviar");
+
+        let usuarioTocado = false; // Variable para saber si ya interactuó con el campo
+
+        function validarFormulario() {
+            const usuario = inputUsuario.value.trim();
+            const pass = inputPass.value;
+            const confirm = inputConfirm.value;
+
+            let contrasenasValidas = false;
+            let usuarioValido = usuario !== "";
+
+            // Validación de Usuario (Solo muestra error si ya tocó el campo y lo dejó vacío)
+            if (usuarioTocado && !usuarioValido) {
+                errorUsuario.textContent = "✖ La matrícula es obligatoria";
+                errorUsuario.style.color = "#f87171"; // Rojo error
+                inputUsuario.classList.add("input-error");
+            } else {
+                errorUsuario.textContent = "";
+                inputUsuario.classList.remove("input-error");
+            }
+
+            // Validación de Contraseñas
+            if (confirm.length > 0) {
+                if (pass === confirm) {
+                    mensajeError.textContent = "✔ Las contraseñas coinciden";
+                    mensajeError.style.color = "#4ade80"; // Verde éxito
+                    inputConfirm.classList.remove("input-error");
+                    contrasenasValidas = true;
+                } else {
+                    mensajeError.textContent = "✖ Las contraseñas no coinciden";
+                    mensajeError.style.color = "#f87171"; 
+                    inputConfirm.classList.add("input-error");
+                }
+            } else {
+                mensajeError.textContent = "";
+                inputConfirm.classList.remove("input-error");
+            }
+
+            // Habilitar botón solo si todo es correcto
+            if (contrasenasValidas && usuarioValido) {
+                btnEnviar.disabled = false;
+            } else {
+                btnEnviar.disabled = true;
+            }
+        }
+
+        // detecta cuando el usuario sale del campo de matrícula
+        inputUsuario.addEventListener("blur", () => {
+            usuarioTocado = true;
+            validarFormulario();
+        });
+
+        //cambios en tiempo real
+        inputUsuario.addEventListener("input", validarFormulario);
+        inputPass.addEventListener("input", validarFormulario);
+        inputConfirm.addEventListener("input", validarFormulario);
+
+        // Envío del formulario
+        document.getElementById("formRegistro").addEventListener("submit", (e) => {
+            e.preventDefault();
+            alert("¡Registro exitoso! Bienvenido a la plataforma de Bienestar Estudiantil.");
+            window.location.href = "index.html";
+        });
+    </script>
+
+</body>
+</html>

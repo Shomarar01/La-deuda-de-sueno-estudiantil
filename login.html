@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Plataforma de Bienestar</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="body-auth">
+
+    <div class="login-contenedor">
+        <h2>Acceso Institucional</h2>
+        <p class="subtitulo">Sistema de Alerta <span>Salud Mental Estudiantil</span></p>
+
+        <!-- Campo de Usuario -->
+        <div class="grupo">
+            <label>Matrícula / Usuario</label>
+            <input type="text" id="usuario" placeholder="Ej. 219304...">
+        </div>
+
+        <!-- Campo de contrasena -->
+        <div class="grupo">
+            <label>Contraseña</label>
+            <div class="campo-password">
+                <input type="password" id="password" placeholder="Ingresa tu contraseña">
+                <button class="btn-mostrar" id="btnMostrar" type="button">Mostrar</button>
+            </div>
+        </div>
+
+        <!-- Botón Scrollytelling -->
+        <button class="btn-submit" onclick="window.location.href='index.html'">Iniciar Sesión</button>
+    </div>
+
+
+    <script>
+        const inputPass = document.getElementById("password");
+        const btnMostrar = document.getElementById("btnMostrar");
+
+        btnMostrar.addEventListener("click", () => {
+            if (inputPass.type === "password") {
+                inputPass.type = "text";
+                btnMostrar.textContent = "Ocultar";
+            } else {
+                inputPass.type = "password";
+                btnMostrar.textContent = "Mostrar";
+            }
+        });
+    </script>
+
+</body>
+</html>

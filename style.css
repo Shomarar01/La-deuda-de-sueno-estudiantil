@@ -76,6 +76,58 @@ h1, h2, h3 {
     color: var(--color-lavanda);
     animation: flotar 2s ease-in-out infinite; }
 
+.nav-autenticacion {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nav-autenticacion a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-autenticacion a:hover {
+    transform: translateY(-2px);
+}
+
+.nav-autenticacion a:focus-visible {
+    outline: 2px solid var(--color-ambar);
+    outline-offset: 3px;
+}
+
+.btn-login {
+    color: var(--texto-principal);
+    background: rgba(30, 27, 75, 0.75);
+    border-color: rgba(241, 245, 249, 0.35) !important;
+}
+
+.btn-login:hover {
+    background: rgba(30, 27, 75, 0.95);
+}
+
+.btn-registro {
+    color: #1E1B4B;
+    background: var(--color-ambar);
+}
+
+.btn-registro:hover {
+    background: #FCD34D;
+}
+
 @keyframes flotar {
     0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); }
 }
@@ -440,5 +492,194 @@ footer .creditos { color: #fff; font-weight: 500; margin-top: 10px; letter-spaci
         color: #818CF8;
         font-size: 24px;
         margin-bottom: 15px;
+    }
+}
+
+/* =========================================
+   PÁGINAS DE AUTENTICACIÓN (LOGIN Y REGISTRO)
+   ========================================= */
+.body-auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--fondo-oscuro, #121424);
+    margin: 0;
+}
+
+/* Contenedor principal estilo Dashboard */
+.registro-contenedor, .login-contenedor {
+    background: rgba(30, 33, 58, 0.6);
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.registro-contenedor h2, .login-contenedor h2 {
+    color: var(--texto-principal, #F8FAFC);
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.registro-contenedor p.subtitulo, .login-contenedor p.subtitulo {
+    color: var(--texto-secundario, #94A3B8);
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.registro-contenedor span, .login-contenedor span {
+    color: var(--color-lavanda, #818CF8);
+}
+
+/* Inputs */
+.grupo {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.grupo label {
+    display: block;
+    font-size: 13px;
+    color: var(--texto-secundario, #94A3B8);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.grupo input {
+    width: 100%;
+    background: rgba(18, 20, 36, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 8px;
+    color: var(--texto-principal, #F8FAFC);
+    padding: 12px 15px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.grupo input:focus {
+    border-color: var(--color-lavanda, #818CF8);
+    box-shadow: 0 0 8px rgba(129, 140, 248, 0.3);
+}
+
+.login-contenedor .campo-password {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.login-contenedor .campo-password input {
+    min-width: 0;
+    flex: 1;
+}
+
+.login-contenedor button.btn-mostrar {
+    width: auto;
+    flex-shrink: 0;
+    margin-top: 0;
+    padding: 0 12px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 8px;
+    background: rgba(18, 20, 36, 0.8);
+    color: var(--texto-principal);
+    cursor: pointer;
+}
+
+.login-contenedor button.btn-mostrar:hover {
+    border-color: var(--color-lavanda);
+}
+
+/* Mensaje de validación */
+#mensajeError {
+    font-size: 13px;
+    margin-top: 8px;
+    font-weight: 600;
+    min-height: 18px; /* Evita que el diseño brinque cuando aparece el texto */
+}
+
+/* Botón de Enviar (Con estados activado/desactivado) */
+.registro-contenedor button, .login-contenedor button.btn-submit {
+    background: var(--color-lavanda, #818CF8);
+    color: var(--fondo-oscuro, #121424);
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.registro-contenedor button:disabled {
+    background-color: rgba(148, 163, 184, 0.2);
+    color: var(--texto-secundario, #94A3B8);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.registro-contenedor button:hover:not(:disabled), .login-contenedor button.btn-submit:hover {
+    background: var(--color-ambar, #FBBF24);
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+/* Enlace de regreso */
+.link-login {
+    display: block;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--texto-secundario, #94A3B8);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.link-login:hover {
+    color: var(--color-lavanda, #818CF8);
+}
+
+/* =========================================
+   ESTILOS DE VALIDACIÓN UX
+   ========================================= */
+/* Asterisco de campo obligatorio */
+span.req {
+    color: var(--color-ambar, #FBBF24);
+    margin-left: 2px;
+}
+
+/* Contenedor estándar para mensajes de error */
+.mensaje-error {
+    font-size: 13px;
+    margin-top: 8px;
+    font-weight: 600;
+    min-height: 18px; /* Evita que el botón brinque al aparecer el texto */
+}
+
+/* Clase dinámica para marcar inputs con error */
+.grupo input.input-error {
+    border-color: #f87171 !important;
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.2);
+}
+
+@media (max-width: 600px) {
+    .nav-autenticacion {
+        top: 1rem;
+        right: 1rem;
+        gap: 0.5rem;
+    }
+
+    .nav-autenticacion a {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.82rem;
+    }
+
+    .portada {
+        padding-top: 5rem;
     }
 }
