@@ -1,0 +1,112 @@
+/* Variables y reseteo base */
+:root {
+    --fondo-oscuro: #121424;
+    --fondo-tarjeta: rgba(30, 33, 58, 0.6);
+    --color-lavanda: #818CF8;
+    --color-ambar: #FBBF24;
+    --color-exito: #4ade80;
+    --color-alerta: #f87171;
+    --texto-principal: #F8FAFC;
+    --texto-secundario: #94A3B8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+
+body {
+    background-color: var(--fondo-oscuro);
+    color: var(--texto-principal);
+    min-height: 100vh;
+}
+
+/* Menú superior */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(18, 20, 36, 0.9);
+    border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+}
+
+.logo { font-weight: bold; font-size: 18px; color: var(--color-lavanda); }
+.logo span { color: var(--texto-secundario); font-weight: normal; }
+
+.usuario-nav { display: flex; align-items: center; gap: 20px; }
+.btn-salir { color: var(--texto-secundario); text-decoration: none; font-size: 14px; transition: color 0.3s; }
+.btn-salir:hover { color: var(--color-alerta); }
+
+/* Contenedor del cuestionario */
+.contenedor-cuestionario {
+    max-width: 600px;
+    margin: 40px auto;
+    background: var(--fondo-tarjeta);
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cabecera-cuestionario { margin-bottom: 30px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 20px;}
+.cabecera-cuestionario h2 { font-size: 22px; color: var(--color-ambar); margin-bottom: 10px; }
+.cabecera-cuestionario p { font-size: 14px; color: var(--texto-secundario); line-height: 1.5; }
+
+/* Estilos de Formulario */
+.pregunta-grupo { margin-bottom: 25px; }
+.pregunta-grupo label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 10px; color: var(--texto-principal); }
+.req { color: var(--color-ambar); }
+.nota-ayuda { display: block; font-size: 12px; color: var(--texto-secundario); margin-top: 5px; }
+
+input[type="number"], select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(18, 20, 36, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 8px;
+    color: var(--texto-principal);
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input[type="number"]:focus, select:focus { border-color: var(--color-lavanda); }
+
+/* Radios personalizados */
+.opciones-radio { display: flex; gap: 20px; }
+.radio-label { display: flex; align-items: center; gap: 8px; font-weight: normal !important; color: var(--texto-secundario) !important; cursor: pointer; }
+.radio-label input[type="radio"] { accent-color: var(--color-lavanda); transform: scale(1.2); }
+
+/* Botón de calcular */
+.btn-calcular, .btn-continuar {
+    width: 100%;
+    padding: 15px;
+    background: var(--color-lavanda);
+    color: var(--fondo-oscuro);
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+.btn-calcular:hover, .btn-continuar:hover { background: var(--color-ambar); transform: translateY(-2px); }
+
+/* Tarjeta de resultado animada */
+.tarjeta-resultado {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    background: rgba(18, 20, 36, 0.9);
+    border: 1px solid var(--color-lavanda);
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+.oculta { display: none; opacity: 0; }
+.tarjeta-resultado h3 { font-size: 20px; margin-bottom: 10px; }
+.tarjeta-resultado p { font-size: 14px; margin-bottom: 20px; color: var(--texto-secundario); }
+
+/* Clases dinámicas de colores para el JS */
+.riesgo-bajo { color: var(--color-exito); }
+.riesgo-medio { color: var(--color-ambar); }
+.riesgo-alto { color: #f97316; /* Naranja */ }
+.riesgo-critico { color: var(--color-alerta); }

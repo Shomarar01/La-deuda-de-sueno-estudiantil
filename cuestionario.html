@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Hábitos - Plataforma de Bienestar</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="cuestionario.css">
+</head>
+<body>
+
+    <!-- Menú superior de usuario -->
+    <nav class="top-nav">
+        <div class="logo">Deuda de Sueño <span>| Sistema de Alerta</span></div>
+        <div class="usuario-nav">
+            <span><i class="fas fa-user-circle"></i> Alumno</span>
+            <a href="login.html" class="btn-salir">Salir</a>
+        </div>
+    </nav>
+
+    <main class="contenedor-cuestionario">
+        <div class="cabecera-cuestionario">
+            <h2>Evaluación de hábitos de descanso</h2>
+            <p>Basado en parámetros del Índice de Pittsburgh (PSQI). Esta información nos ayudará a brindarte recomendaciones oportunas.</p>
+        </div>
+
+        <form id="formCuestionario">
+            <!-- 1. Horas de Sueño -->
+            <div class="pregunta-grupo">
+                <label for="horas_sueno">1. Durante el último mes, ¿cuántas horas de sueño real tuviste por noche en promedio? <span class="req">*</span></label>
+                <input type="number" id="horas_sueno" name="horas_sueno" min="1" max="16" step="0.5" placeholder="Ej. 6.5" required>
+            </div>
+
+            <!-- 2. Calidad Subjetiva -->
+            <div class="pregunta-grupo">
+                <label for="calidad_sueno">2. ¿Cómo calificarías la calidad general de tu sueño? <span class="req">*</span></label>
+                <select id="calidad_sueno" name="calidad_sueno" required>
+                    <option value="" disabled selected>Selecciona una opción...</option>
+                    <option value="5">Excelente (Descanso profundo)</option>
+                    <option value="4">Buena (Despertares breves)</option>
+                    <option value="3">Regular (Tardo en dormir o me despierto)</option>
+                    <option value="2">Mala (Dificultad constante para dormir)</option>
+                    <option value="1">Pésima (Insomnio severo)</option>
+                </select>
+            </div>
+
+            <!-- 3. Pantallas -->
+            <div class="pregunta-grupo">
+                <label>3. ¿Sueles usar pantallas (celular, tablet, laptop) en la cama justo antes de intentar dormir?</label>
+                <div class="opciones-radio">
+                    <label class="radio-label"><input type="radio" name="uso_pantallas" value="1" required> Sí</label>
+                    <label class="radio-label"><input type="radio" name="uso_pantallas" value="0"> No</label>
+                </div>
+            </div>
+
+            <!-- 4. Cafeína -->
+            <div class="pregunta-grupo">
+                <label>4. ¿Consumes bebidas con cafeína (café, energizantes) después de las 6:00 PM?</label>
+                <div class="opciones-radio">
+                    <label class="radio-label"><input type="radio" name="consumo_cafeina" value="1" required> Sí</label>
+                    <label class="radio-label"><input type="radio" name="consumo_cafeina" value="0"> No</label>
+                </div>
+            </div>
+
+            <!-- 5. Jetlag Social -->
+            <div class="pregunta-grupo">
+                <label for="jetlag_social_horas">5. Jetlag Social: ¿De cuántas horas es la diferencia entre tu hora de despertar en fin de semana vs. entre semana? <span class="req">*</span></label>
+                <input type="number" id="jetlag_social_horas" name="jetlag_social_horas" min="0" max="12" step="0.5" placeholder="Ej. 2.0" required>
+                <small class="nota-ayuda">Ej. Si entre semana despiertas a las 6 AM y el sábado a las 10 AM, la diferencia es de 4 horas.</small>
+            </div>
+
+            <button type="submit" class="btn-calcular">Calcular Índice de Riesgo</button>
+        </form>
+
+        <!-- Tarjeta de Resultado Oculta (Aparece con JS) -->
+        <div id="resultadoCuestionario" class="tarjeta-resultado oculta">
+            <h3>Tu Nivel de riesgo: <span id="etiquetaRiesgo">Calculando...</span></h3>
+            <p id="mensajeRiesgo">Procesando tus datos de sueño...</p>
+            <!-- Botón simulado para ir al dashboard en el futuro -->
+            <button onclick="window.location.href='dashboard_alumno.html'" class="btn-continuar">Ver mi historial en el panel</button>
+        </div>
+    </main>
+
+    <script src="cuestionario.js"></script>
+</body>
+</html>
