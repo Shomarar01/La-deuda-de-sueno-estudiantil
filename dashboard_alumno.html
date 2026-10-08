@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Deuda de Sueño</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="dashboard.css"> 
+</head>
+<body class="body-dashboard">
+
+    <header class="nav-principal">
+        <a href="index.html" class="nav-logo" style="text-decoration: none;">Deuda de <span>Sueño</span></a>
+        <div class="nav-enlaces">
+            <a href="cuestionario.html" class="nav-btn-cuestionario">Evalúa tu descanso</a>
+            <span class="separador">|</span>
+            <a href="#" class="usuario-activo"><i class="fas fa-user-circle"></i> Mi Perfil</a>
+            <a href="#" id="btnCerrarSesionGlobal" class="btn-salir">Salir</a>
+        </div>
+    </header>
+
+    <main class="contenedor-dashboard">
+        
+        <!-- Saludo y Estado Actual (Lenguaje Neutral) -->
+        <section class="panel-header">
+            <div>
+                <h2>Te damos la bienvenida, <span id="dashNombre" style="color: var(--texto-principal);">Cargando...</span></h2>
+                <p>Matrícula: <strong id="dashMatricula">--</strong> | Ingreso: <strong id="dashIngreso">--</strong></p>
+            </div>
+            <div class="tarjeta-estado">
+                <span>Tu nivel de riesgo actual:</span>
+                <h3 id="dashNivelRiesgo" class="riesgo-medio">Calculando...</h3> 
+            </div>
+        </section>
+
+        <!-- Fila 1: Resumen y Recomendaciones -->
+        <section class="dashboard-grid">
+            <div class="card metrics-card">
+                <h3><i class="fas fa-chart-pie"></i> Resumen del último mes</h3>
+                <div class="metric-row"><span>Horas promedio de sueño:</span><strong id="dashHoras">-- h</strong></div>
+                <div class="metric-row"><span>Jetlag Social:</span><strong id="dashJetlag">-- h</strong></div>
+                <div class="metric-row"><span>Nivel de Estrés:</span><strong id="dashEstres">--</strong></div>
+            </div>
+
+            <div class="card reco-card">
+                <h3><i class="fas fa-lightbulb"></i> Recomendaciones para ti</h3>
+                <p id="dashRecomendacion" class="texto-recomendacion">Cargando sugerencias...</p>
+                <a href="cuestionario.html" class="btn-accion-outline">Actualizar mis datos de este trimestre</a>
+            </div>
+        </section>
+
+        <!-- Fila 2: Evolución Trimestral (Fuera de tarjeta, diseño panorámico) -->
+        <section class="evolucion-section">
+            <div class="evolucion-header">
+                <h3><i class="fas fa-history"></i> Tu Línea de Tiempo Académica</h3>
+                <p>Registro histórico desde tu trimestre de ingreso. Los espacios vacíos indican trimestres sin evaluación.</p>
+            </div>
+            
+            <!-- Contenedor con scroll horizontal para que nunca se aplaste -->
+            <div class="grafica-panoramica" id="contenedorGrafica">
+                <!-- Las barras se inyectarán mágicamente con JavaScript -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Nuevo Footer Elegante -->
+    <footer class="footer-dashboard">
+        <div class="footer-contenido">
+            <p><strong>Deuda de Sueño</strong> | Proyecto de Web Dinámico</p>
+            <p class="footer-legal">Universidad Autónoma Metropolitana Unidad Cuajimalpa.<br>Los datos aquí mostrados tienen fines estadísticos y académicos.</p>
+        </div>
+    </footer>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

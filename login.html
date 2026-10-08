@@ -4,50 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - Plataforma de Bienestar</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="body-auth">
+    <header class="nav-principal">
+        <div class="nav-logo">
+            <a href="index.html" style="text-decoration: none; color: inherit;">Deuda de <span>Sueño</span></a>
+        </div>
+        <div class="nav-enlaces">
+            <!-- Si está en login, el botón resaltado es "Crear Perfil" y viceversa -->
+            <a href="registro.html" class="nav-btn-registro">Crear Perfil</a>
+        </div>
+    </header>
 
     <div class="login-contenedor">
         <h2>Acceso Institucional</h2>
         <p class="subtitulo">Sistema de Alerta <span>Salud Mental Estudiantil</span></p>
 
-        <!-- Campo de Usuario -->
-        <div class="grupo">
-            <label>Matrícula / Usuario</label>
-            <input type="text" id="usuario" placeholder="Ej. 219304...">
-        </div>
-
-        <!-- Campo de contrasena -->
-        <div class="grupo">
-            <label>Contraseña</label>
-            <div class="campo-password">
-                <input type="password" id="password" placeholder="Ingresa tu contraseña">
-                <button class="btn-mostrar" id="btnMostrar" type="button">Mostrar</button>
+        <!-- El form envuelve todo ahora -->
+        <form id="formLogin">
+            <div class="grupo">
+                <label for="usuarioLogin">Matrícula / Nombre de usuario</label>
+                <input type="text" id="usuarioLogin" placeholder="Ej. 219304..." required>
             </div>
-        </div>
 
-        <!-- Botón Scrollytelling -->
-        <button class="btn-submit" onclick="window.location.href='index.html'">Iniciar Sesión</button>
+            <div class="grupo">
+                <label for="passwordLogin">Contraseña</label>
+                <div class="campo-password">
+                    <input type="password" id="passwordLogin" placeholder="Ingresa tu contraseña" required>
+                    <button class="btn-mostrar" id="btnMostrar" type="button">Mostrar</button>
+                </div>
+            </div>
+
+            <button type="submit" id="btnIngresar" class="btn-submit" disabled>Iniciar Sesión</button>
+        </form>
     </div>
 
-
     <script>
-        const inputPass = document.getElementById("password");
+        const inputUsuario = document.getElementById("usuarioLogin");
+        const inputPass = document.getElementById("passwordLogin");
+        const btnIngresar = document.getElementById("btnIngresar");
         const btnMostrar = document.getElementById("btnMostrar");
 
+        // Lógica para Mostrar/Ocultar contraseña
         btnMostrar.addEventListener("click", () => {
-            if (inputPass.type === "password") {
-                inputPass.type = "text";
-                btnMostrar.textContent = "Ocultar";
+            const tipo = inputPass.getAttribute("type") === "password" ? "text" : "password";
+            inputPass.setAttribute("type", tipo);
+            btnMostrar.textContent = tipo === "password" ? "Mostrar" : "Ocultar";
+        });
+
+        // Lógica de habilitar el botón
+        function validarLogin() {
+            if (inputUsuario.value.trim() !== "" && inputPass.value.trim() !== "") {
+                btnIngresar.disabled = false;
             } else {
-                inputPass.type = "password";
-                btnMostrar.textContent = "Mostrar";
+                btnIngresar.disabled = true;
             }
+        }
+
+        inputUsuario.addEventListener("input", validarLogin);
+        inputPass.addEventListener("input", validarLogin);
+
+        // Envío del formulario
+        document.getElementById("formLogin").addEventListener("submit", (e) => {
+            e.preventDefault();
+            // ¡MAGIA DE SESIÓN SIMULADA! Guardamos en el navegador que ya inició sesión
+            localStorage.setItem("sesionActiva", "true");
+            window.location.href = "dashboard_alumno.html";
         });
     </script>
-
 </body>
 </html>

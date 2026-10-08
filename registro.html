@@ -10,12 +10,26 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="body-auth">
-
+    <header class="nav-principal">
+        <div class="nav-logo">
+            <a href="index.html" style="text-decoration: none; color: inherit;">Deuda de <span>Sueño</span></a>
+        </div>
+        <div class="nav-enlaces">
+            <!-- Si está en login, el botón resaltado es "Crear Perfil" y viceversa -->
+            <a href="registro.html" class="nav-btn-registro">Crear Perfil</a>
+        </div>
+    </header>
+    
     <div class="registro-contenedor">
         <h2>Crear Cuenta</h2>
         <p class="subtitulo">Únete al Sistema de <span>Alerta Temprana</span></p>
 
         <form id="formRegistro">
+            <div class="grupo">
+                <label for="nombreAlumno">Nombre completo <span class="req">*</span></label>
+                <input type="text" id="nombreAlumno" placeholder="Ej. Nombre Apellido" required>
+                <div id="errorNombre" class="mensaje-error"></div>
+            </div>
             <div class="grupo">
                 <label for="usuario">Matrícula / Nombre de usuario <span class="req">*</span></label>
                 <input type="text" id="usuario" placeholder="Ej. 219304" required>
@@ -45,10 +59,12 @@
     <script>
         const inputUsuario = document.getElementById("usuario");
         const errorUsuario = document.getElementById("errorUsuario");
+        const inputNombre = document.getElementById("nombreAlumno");
         
         const inputPass = document.getElementById("password");
         const inputConfirm = document.getElementById("confirmPassword");
         const mensajeError = document.getElementById("mensajeError");
+        inputNombre.value.trim() !== ""
         
         const btnEnviar = document.getElementById("btnEnviar");
 
@@ -114,6 +130,44 @@
             alert("¡Registro exitoso! Bienvenido a la plataforma de Bienestar Estudiantil.");
             window.location.href = "index.html";
         });
+
+        // Asegúrate de tener capturados los inputs al inicio del script
+        const inputPassRegistro = document.getElementById("passwordRegistro"); // Asegúrate de que el ID coincida
+        const btnRegistrar = document.getElementById("btnRegistrar");
+        const mensajeErrorPass = document.getElementById("errorPass"); // Un div vacío debajo del input de password
+
+        function validarRegistro() {
+            const nombre = inputNombre.value.trim().toLowerCase();
+            const pass = inputPassRegistro.value.trim().toLowerCase();
+
+            let esValido = true;
+            mensajeErrorPass.textContent = ""; // Limpiamos errores previos
+
+            // Validación: La contraseña no puede contener el nombre
+            if (nombre !== "" && pass !== "" && pass.includes(nombre)) {
+                mensajeErrorPass.textContent = "Por seguridad, la contraseña no puede ser igual ni contener tu nombre.";
+                mensajeErrorPass.style.color = "var(--color-alerta)";
+                esValido = false;
+            }
+
+            // Aquí irían tus otras validaciones (ej. que las contraseñas coincidan)
+
+            // Habilitar o deshabilitar botón
+            btnRegistrar.disabled = !esValido;
+        }
+
+        // Escuchar cambios
+        inputNombre.addEventListener("input", validarRegistro);
+        inputPassRegistro.addEventListener("input", validarRegistro);
+
+        // Al simular el registro exitoso:
+        document.getElementById("formRegistro").addEventListener("submit", (e) => {
+            e.preventDefault();
+            localStorage.setItem("sesionActiva", "true"); // Lo "logueamos" automáticamente
+            localStorage.setItem("nombreAlumno", inputNombre.value); // Guardamos su nombre real
+            window.location.href = "cuestionario.html"; // Lo mandamos directo a evaluarse
+        });
+
     </script>
 
 </body>

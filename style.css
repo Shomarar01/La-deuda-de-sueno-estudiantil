@@ -667,6 +667,173 @@ span.req {
     box-shadow: 0 0 8px rgba(248, 113, 113, 0.2);
 }
 
+/* =========================================
+   CTA - CONTINUACIÓN DE LA CALCULADORA
+   ========================================= */
+.cta-continuacion {
+    max-width: 700px;
+    margin: 20px auto 60px; /* Margen superior pequeño para que se sienta unido a la calculadora */
+    text-align: center;
+    padding: 0 20px;
+}
+
+.cta-continuacion h3 {
+    color: var(--color-lavanda);
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.cta-continuacion p {
+    color: var(--texto-secundario);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.cta-botones {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* Estilos generales para los botones del CTA */
+.cta-botones a {
+    text-decoration: none; 
+    display: inline-block;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    padding: 14px 28px; /* <-- Esta línea genera el espacio interno */
+    font-size: 16px;    /* <-- Asegura un tamaño de letra legible */
+}
+
+/* Mantén estos exactamente como los tenías: */
+.btn-registro {
+    background-color: var(--color-lavanda);
+    color: var(--fondo-oscuro);
+    border: none;
+}
+
+.btn-registro:hover {
+    background-color: var(--color-ambar);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.btn-login {
+    background-color: transparent;
+    color: var(--color-lavanda);
+    border: 2px solid var(--color-lavanda);
+}
+
+.btn-login:hover {
+    background-color: rgba(129, 140, 248, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Diseño del Disclaimer tipo nota legal */
+.disclaimer-text {
+    background: rgba(18, 20, 36, 0.5);
+    border-left: 3px solid var(--texto-secundario);
+    padding: 15px;
+    font-size: 12px;
+    color: #cbd5e1; /* Gris un poco más claro */
+    text-align: left;
+    border-radius: 0 8px 8px 0;
+    line-height: 1.5;
+}
+
+.disclaimer-text strong {
+    color: var(--texto-principal);
+}
+
+
+/* =========================================
+   BARRA DE NAVEGACIÓN SUPERIOR (INDEX)
+   ========================================= */
+.nav-principal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: rgba(18, 20, 36, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+    z-index: 1000; /* Asegura que flote sobre las gráficas de D3 */
+}
+
+.nav-logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--texto-principal);
+}
+
+.nav-logo span {
+    color: var(--color-lavanda);
+}
+
+.nav-enlaces {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-btn-login, .nav-btn-registro {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-btn-login {
+    color: var(--texto-secundario);
+}
+
+.nav-btn-login:hover {
+    color: var(--color-lavanda);
+}
+
+.nav-btn-registro {
+    background: var(--color-lavanda);
+    color: var(--fondo-oscuro);
+}
+
+.nav-btn-registro:hover {
+    background: var(--color-ambar);
+    transform: translateY(-2px);
+}
+
+/* Compensar el espacio de la barra en el body para que no tape el título */
+body {
+    padding-top: 60px; 
+}
+
+.nav-btn-cuestionario {
+    color: var(--color-ambar);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.nav-btn-cuestionario:hover {
+    color: var(--color-lavanda);
+}
+
+.separador {
+    color: rgba(148, 163, 184, 0.3);
+    margin: 0 5px;
+}
+
 @media (max-width: 600px) {
     .nav-autenticacion {
         top: 1rem;
@@ -682,4 +849,21 @@ span.req {
     .portada {
         padding-top: 5rem;
     }
+}
+
+/* Eliminar el color morado de "enlace visitado" en los botones del menú */
+.nav-btn-cuestionario:visited { 
+    color: var(--color-ambar); 
+}
+
+.usuario-activo:visited { 
+    color: var(--texto-principal) !important; 
+}
+
+.btn-salir:visited, .nav-btn-login:visited { 
+    color: var(--texto-secundario); 
+}
+
+.nav-btn-registro:visited { 
+    color: var(--fondo-oscuro); 
 }

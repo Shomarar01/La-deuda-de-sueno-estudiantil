@@ -10,29 +10,36 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
     <script src="https://unpkg.com/scrollama"></script>
-    
+
     <!-- Íconos para la calculadora-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-
-    <header class="portada">
-        <!-- autenticacion -->
-        <div class="nav-autenticacion">
-            <a href="login.html" class="btn-login">Iniciar Sesión</a>
-            <a href="registro.html" class="btn-registro">Registrarse</a>
+<!-- Barra de navegación fija superior) -->
+    <header class="nav-principal">
+        <a href="index.html" class="nav-logo" style="text-decoration: none;">Deuda de <span>Sueño</span></a>
+        <div class="nav-enlaces">
+            <!-- Nuevo acceso rápido al cuestionario -->
+            <a href="cuestionario.html" class="nav-btn-cuestionario">Evalúa tu descanso</a>
+            <span class="separador">|</span>
+            <a href="login.html" class="nav-btn-login">Iniciar Sesión</a>
+            <a href="registro.html" class="nav-btn-registro">Crear Perfil</a>
         </div>
+    </header>
+
+    <!-- 2. La Portada (Ahora es un section y sin botones duplicados) -->
+    <section class="portada">
         <h1>La deuda de sueño:<br><span>Hábitos y rendimiento universitario</span></h1>
         <p>Un reportaje visual que demuestra por qué el desvelo no es un trofeo, sino el ancla que hunde tus calificaciones.</p>
         <p class="instruccion">Desliza para explorar los datos ↓</p>
+
         <!-- Contenedor para los puntos animados -->
         <div id="animacion-portada" style="position: absolute; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none; overflow: hidden;"></div>
-    </header>
+    </section>
 
     <!-- ZONA 1: SCROLLYTELLING -->
     <section id="scrolly">
         <article class="textos-scroll">
-            
+
             <!-- Escena 0 -->
             <div class="step" data-step="0">
                 <h2>El mapa del insomnio</h2>
@@ -166,6 +173,23 @@
         </div>
     </section>
 
+
+            <!-- CTA Integrado visualmente a la Calculadora -->
+    <div class="cta-continuacion">
+        <h3>¿Quieres ir un paso más allá?</h3>
+        <p>La calculadora te da un panorama rápido, pero el descanso universitario depende de múltiples factores. Únete a nuestra plataforma para llevar un registro de tus hábitos, observar tu evolución durante el trimestre y contribuir a las estadísticas de bienestar de la universidad.</p>
+        
+        <div class="cta-botones">
+            <a href="registro.html" class="btn-registro">Crear mi Perfil</a>
+            <a href="login.html" class="btn-login">Ya tengo cuenta</a>
+        </div>
+
+        <!-- Disclaimer / Aviso de no validez oficial -->
+        <div class="disclaimer-text">
+            <i class="fas fa-info-circle"></i> <strong>Aviso importante:</strong> Esta plataforma es un proyecto académico de autoconocimiento y recopilación estadística. Los resultados obtenidos son únicamente una guía y <strong>no tienen validez oficial ni constituyen un diagnóstico clínico</strong>. Si sientes que el estrés o el cansancio afectan tu bienestar, te recomendamos consultar directamente con el servicio médico o de apoyo psicológico de la universidad.
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer>
         <p>Proyecto Final - Sexto Trimestre 26-P</p>
@@ -190,6 +214,33 @@
     <script src="js/main.js"></script>
     
 
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Revisamos si el alumno "inició sesión" simuladamente
+        const estaLogueado = localStorage.getItem("sesionActiva") === "true";
+        const contenedorEnlaces = document.querySelector(".nav-enlaces");
+
+        if (estaLogueado) {
+            // Reemplazamos los botones por el menú de usuario activo
+            contenedorEnlaces.innerHTML = `
+                <a href="cuestionario.html" class="nav-btn-cuestionario">Evalúa tu descanso</a>
+                <span class="separador">|</span>
+                <a href="dashboard_alumno.html" style="color: var(--texto-principal); text-decoration: none; margin-right: 15px; font-weight: 500;">
+                    <i class="fas fa-user-circle"></i> Mi Perfil
+                </a>
+                <a href="#" id="btnCerrarSesion" style="color: var(--texto-secundario); text-decoration: none;">Salir</a>
+            `;
+
+            // Lógica para cerrar sesión
+            document.getElementById("btnCerrarSesion").addEventListener("click", (e) => {
+                e.preventDefault();
+                localStorage.removeItem("sesionActiva");
+                localStorage.removeItem("nombreAlumno");
+                window.location.reload(); // Recarga la página y vuelven a aparecer los botones de Login
+            });
+        }
+    });
+</script>
 </body>
 <div id="alerta-movil">
     <h1>Visualización no optimizada para móviles</h1>

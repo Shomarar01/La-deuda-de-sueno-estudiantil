@@ -5,65 +5,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajeRiesgo = document.getElementById('mensajeRiesgo');
     const btnCalcular = document.querySelector('.btn-calcular');
 
+    // Botón de salir (Redirige a inicio)
+    document.querySelector('.btn-salir').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'index.html';
+    });
+
     form.addEventListener('submit', (e) => {
-        // Evita que la página se recargue
         e.preventDefault();
 
-        // los valores de los inputs
+        // Captura de nuevas variables PSQI y Salud Mental
         const horas = parseFloat(document.getElementById('horas_sueno').value);
-        const calidad = parseInt(document.getElementById('calidad_sueno').value);
-        const usoPantallas = parseInt(document.querySelector('input[name="uso_pantallas"]:checked').value);
-        const consumoCafeina = parseInt(document.querySelector('input[name="consumo_cafeina"]:checked').value);
+        const latencia = parseInt(document.getElementById('latencia_sueno').value);
+        const disfuncion = parseInt(document.getElementById('disfuncion_diurna').value);
         const jetlag = parseFloat(document.getElementById('jetlag_social_horas').value);
+        const estres = parseInt(document.getElementById('nivel_estres').value);
+        const ueas = parseInt(document.getElementById('ueas_inscritas').value);
 
-        // 2. Algoritmo de Riesgo Simulado (Sistema de Puntos estilo PSQI)
+        // Algoritmo de Riesgo Integral (PSQI adaptado)
         let puntosRiesgo = 0;
 
-        // Evaluación de Horas
+        // Horas (Menos de 6 es problemático)
         if (horas < 5) puntosRiesgo += 3;
-        else if (horas < 7) puntosRiesgo += 1.5;
-        // Evaluación de Calidad (1=Pésima suma 3 pts, 5=Excelente suma 0)
-        if (calidad <= 2) puntosRiesgo += 2;
-        else if (calidad === 3) puntosRiesgo += 1;
-        // Hábitos nocivos
-        if (usoPantallas === 1) puntosRiesgo += 1;
-        if (consumoCafeina === 1) puntosRiesgo += 1;
-        // Jetlag Social (Más de 2 horas altera severamente el ritmo circadiano)
-        if (jetlag >= 2) puntosRiesgo += 1.5;
+        else if (horas < 6) puntosRiesgo += 2;
 
-        //  Nivel y Textos
+        // Latencia y Disfunción (Suman directo el valor 0-3 del select)
+        puntosRiesgo += latencia;
+        puntosRiesgo += disfuncion;
+
+        // Jetlag Social
+        if (jetlag >= 2) puntosRiesgo += 2;
+
+        // Multiplicador por Salud Mental y Carga Académica
+        if (estres >= 4) puntosRiesgo += 3; // Estrés alto suma mucho riesgo
+        if (ueas >= 5 && horas < 6) puntosRiesgo += 2; // Burnout por sobrecarga
+
+        // 3. Determinación de Nivel y Textos (Enfoque UX y Cuidado Emocional)
         let nivel = "";
         let claseColor = "";
         let mensaje = "";
 
-        if (puntosRiesgo >= 6) {
-            nivel = "CRÍTICO";
-            claseColor = "riesgo-critico";
-            mensaje = "Atención: Tus hábitos de sueño muestran indicadores de riesgo severos. Se recomienda encarecidamente revisar tu higiene del sueño o buscar apoyo en el área de bienestar.";
-        } else if (puntosRiesgo >= 4) {
-            nivel = "ALTO";
+        if (puntosRiesgo >= 10) {
+            nivel = "Atención Prioritaria";
+            claseColor = "riesgo-critico"; // Mantenemos la clase CSS para el color rojo/naranja fuerte
+            mensaje = "Tus respuestas sugieren una acumulación de fatiga y estrés importante. Como medida de bienestar, podría ser muy útil y favorable para ti acercarte a la coordinación de apoyo estudiantil o servicio médico de la universidad para platicar sobre tus rutinas.";
+        } else if (puntosRiesgo >= 6) {
+            nivel = "Requiere Atención";
             claseColor = "riesgo-alto";
-            mensaje = "Precaución: Tienes una acumulación notable de deuda de sueño. Es probable que experimentes fatiga cognitiva durante el trimestre.";
-        } else if (puntosRiesgo >= 2) {
-            nivel = "MEDIO";
+            mensaje = "Tus hábitos actuales indican cierta irregularidad en tu descanso que podría influir en tu energía diurna. Intentar ajustar tus horarios de estudio y sueño podría marcar una diferencia muy positiva en este trimestre.";
+        } else if (puntosRiesgo >= 3) {
+            nivel = "Favorable";
             claseColor = "riesgo-medio";
-            mensaje = "Regular: Tienes algunos hábitos que podrían mejorar para optimizar tu descanso y rendimiento académico.";
+            mensaje = "Tus rutinas son estables en general. Existen pequeños detalles (como el uso de pantallas o la diferencia de horarios en fin de semana) que, si los ajustas, te ayudarán a optimizar aún más tu rendimiento.";
         } else {
-            nivel = "BAJO";
+            nivel = "Óptimo";
             claseColor = "riesgo-bajo";
-            mensaje = "¡Excelente! Mantienes una higiene de sueño óptima. Tus hábitos protegen tu salud mental y cognitiva.";
+            mensaje = "¡Vas por muy buen camino! Tus respuestas reflejan un equilibrio adecuado entre tus actividades académicas y tus rutinas de descanso. Mantener este ritmo te ayudará bastante.";
         }
 
-        //resultado en pantalla (Simulando respuesta del backend)
-        btnCalcular.style.display = 'none'; // Ocultamos el botón de enviar
-        
+        // 4. Mostrar el resultado en pantalla
+        btnCalcular.style.display = 'none';
+
         etiquetaRiesgo.textContent = nivel;
-        etiquetaRiesgo.className = claseColor; // Aplicamos el color (verde, amarillo, rojo)
+        etiquetaRiesgo.className = claseColor;
         mensajeRiesgo.textContent = mensaje;
-        
-        // Efecto visual de despliegue
         resultadoDiv.classList.remove('oculta');
-        
-        // Nota: En la Fase 2, aquí usaremos fetch() para enviar 'horas', 'calidad', etc., a Node.js
     });
+
+    // Lógica universal para Cerrar Sesión
+    const btnSalir = document.getElementById("btnCerrarSesionGlobal");
+    if (btnSalir) {
+        btnSalir.addEventListener("click", (e) => {
+            e.preventDefault();
+            // 1. Borramos la memoria temporal
+            localStorage.removeItem("sesionActiva");
+            localStorage.removeItem("nombreAlumno");
+            // 2. Lo mandamos a la portada (que ahora mostrará los botones de Login de nuevo)
+            window.location.href = "index.html";
+        });
+    }
 });
