@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (puntosRiesgo >= 10) {
             nivel = "Atención Prioritaria";
-            claseColor = "riesgo-critico"; // Mantenemos la clase CSS para el color rojo/naranja fuerte
+            claseColor = "riesgo-critico"; 
             mensaje = "Tus respuestas sugieren una acumulación de fatiga y estrés importante. Como medida de bienestar, podría ser muy útil y favorable para ti acercarte a la coordinación de apoyo estudiantil o servicio médico de la universidad para platicar sobre tus rutinas.";
         } else if (puntosRiesgo >= 6) {
             nivel = "Requiere Atención";
@@ -70,6 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
         etiquetaRiesgo.className = claseColor;
         mensajeRiesgo.textContent = mensaje;
         resultadoDiv.classList.remove('oculta');
+
+        // 5. MAGIA FRONTEND: Guardar los resultados en la memoria del navegador
+        localStorage.setItem("testCompletado", "true");
+        localStorage.setItem("ultimoTest_horas", horas);
+        localStorage.setItem("ultimoTest_jetlag", jetlag);
+        localStorage.setItem("ultimoTest_riesgo", nivel);
+        localStorage.setItem("ultimoTest_claseColor", claseColor);
+
+        // Convertir el valor numérico del estrés a texto para el panel (Los índices coinciden con el value del select)
+        const nivelesEstres = ["", "Muy bajo", "Bajo", "Moderado", "Alto", "Severo"];
+        localStorage.setItem("ultimoTest_estres", nivelesEstres[estres]);
     });
 
     // Lógica universal para Cerrar Sesión
@@ -80,7 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // 1. Borramos la memoria temporal
             localStorage.removeItem("sesionActiva");
             localStorage.removeItem("nombreAlumno");
-            // 2. Lo mandamos a la portada (que ahora mostrará los botones de Login de nuevo)
+            // Limpiamos también los datos del test al salir por privacidad
+            localStorage.removeItem("testCompletado");
+            localStorage.removeItem("ultimoTest_horas");
+            localStorage.removeItem("ultimoTest_jetlag");
+            localStorage.removeItem("ultimoTest_riesgo");
+            localStorage.removeItem("ultimoTest_claseColor");
+            localStorage.removeItem("ultimoTest_estres");
+
+            // 2. Lo mandamos a la portada
             window.location.href = "index.html";
         });
     }
