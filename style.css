@@ -829,6 +829,17 @@ body {
     color: var(--color-lavanda);
 }
 
+.btn-salir {
+    color: var(--texto-secundario);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.btn-salir:hover {
+    color: var(--color-alerta);
+}
+
 .separador {
     color: rgba(148, 163, 184, 0.3);
     margin: 0 5px;

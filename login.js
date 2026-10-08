@@ -22,10 +22,27 @@ const inputUsuario = document.getElementById("usuarioLogin");
         inputUsuario.addEventListener("input", validarLogin);
         inputPass.addEventListener("input", validarLogin);
 
-        // Envío del formulario
+        // Envío del formulario con Simulación de Roles (RBAC)
         document.getElementById("formLogin").addEventListener("submit", (e) => {
             e.preventDefault();
-            // ¡MAGIA DE SESIÓN SIMULADA! Guardamos en el navegador que ya inició sesión
+
+            // Leemos lo que escribió el usuario y lo pasamos a minúsculas para evitar errores
+            const usuarioIngresado = inputUsuario.value.trim().toLowerCase();
+
             localStorage.setItem("sesionActiva", "true");
-            window.location.href = "dashboard_alumno.html";
+
+            // Si el usuario es 'admin' o 'bienestar', lo mandamos al panel institucional
+            if (usuarioIngresado === "admin" || usuarioIngresado === "bienestar") {
+                localStorage.setItem("rol", "administrador");
+                window.location.href = "Usuarios/dashboard_admin.html";
+            }
+            // Si es cualquier otra matrícula, es un estudiante
+            else {
+                localStorage.setItem("rol", "alumno");
+                // Opcional: guardamos su matrícula como nombre temporal para el saludo
+                if(!localStorage.getItem("nombreAlumno")) {
+                    localStorage.setItem("nombreAlumno", inputUsuario.value.trim());
+                }
+                window.location.href = "Usuarios/dashboard_alumno.html";
+            }
         });

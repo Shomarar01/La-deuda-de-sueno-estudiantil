@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem("sesionActiva");
             localStorage.removeItem("nombreAlumno");
             // 2. Lo mandamos a la portada (que ahora mostrará los botones de Login de nuevo)
-            window.location.href = "index.html";
+            window.location.href = "../index.html";
         });
     }
 });

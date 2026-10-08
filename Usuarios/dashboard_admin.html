@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mando Institucional - Deuda de Sueño</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="body-dashboard">
+
+    <header class="nav-principal">
+        <a href="../index.html" class="nav-logo" style="text-decoration: none;">Deuda de <span>Sueño</span></a>
+        <div class="nav-enlaces">
+            <span class="usuario-activo" style="color: var(--color-ambar);"><i class="fas fa-shield-alt"></i> Red institucional</span>
+            <span class="separador">|</span>
+            <a href="#" id="btnCerrarSesionGlobal" class="btn-salir">Salir</a>
+        </div>
+    </header>
+
+    <main class="contenedor-dashboard">
+        
+        <section class="panel-header-fluido">
+            <div>
+                <h2 style="font-size: 32px;">Monitoreo global UAM</h2>
+                <p>Selecciona una unidad para desplegar las métricas de bienestar por división académica.</p>
+            </div>
+            
+            <!-- Controles Globales (Práctica) -->
+            <div class="controles-vista">
+                <span style="font-size: 13px; color: var(--texto-secundario);">Modo de lectura:</span>
+                <button class="btn-modo activo" onclick="cambiarModoGlobal('completo');"><i class="fas fa-layer-group"></i> Híbrido</button>
+                <button class="btn-modo" onclick="cambiarModoGlobal('solo-texto');"><i class="fas fa-file-alt"></i> Crudo</button>
+            </div>
+        </section>
+
+        <!-- El Filtro Interactivo (Estilo 2026) -->
+        <nav class="filtro-unidades">
+            <button class="btn-unidad activo" onclick="cargarUnidad('cuajimalpa', this)">Cuajimalpa</button>
+            <button class="btn-unidad" onclick="cargarUnidad('azcapotzalco', this)">Azcapotzalco</button>
+            <button class="btn-unidad" onclick="cargarUnidad('iztapalapa', this)">Iztapalapa</button>
+            <button class="btn-unidad" onclick="cargarUnidad('lerma', this)">Lerma</button>
+            <button class="btn-unidad" onclick="cargarUnidad('xochimilco', this)">Xochimilco</button>
+        </nav>
+
+        <!-- Contenedor donde ocurre la magia del DOM-->
+        <section id="contenedor-dinamico" class="espacio-fluido">
+        </section>
+
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>

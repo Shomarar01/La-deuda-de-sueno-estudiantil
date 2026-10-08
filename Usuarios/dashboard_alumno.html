@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - Deuda de Sueño</title>
+    <title>Mi perfil - Deuda de Sueño</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css"> 
-    <link rel="stylesheet" href="dashboard.css"> 
+    <link rel="stylesheet" href="../style.css"> 
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body class="body-dashboard">
 
     <header class="nav-principal">
-        <a href="index.html" class="nav-logo" style="text-decoration: none;">Deuda de <span>Sueño</span></a>
+        <a href="../index.html" class="nav-logo" style="text-decoration: none;">Deuda de <span>Sueño</span></a>
         <div class="nav-enlaces">
-            <a href="cuestionario.html" class="nav-btn-cuestionario">Evalúa tu descanso</a>
+            <a href="../cuestionario.html" class="nav-btn-cuestionario">Evalúa tu descanso</a>
             <span class="separador">|</span>
-            <a href="#" class="usuario-activo"><i class="fas fa-user-circle"></i> Mi Perfil</a>
+            <a href="#" class="usuario-activo"><i class="fas fa-user-circle"></i> Mi perfil</a>
             <a href="#" id="btnCerrarSesionGlobal" class="btn-salir">Salir</a>
         </div>
     </header>
@@ -40,21 +40,21 @@
             <div class="card metrics-card">
                 <h3><i class="fas fa-chart-pie"></i> Resumen del último mes</h3>
                 <div class="metric-row"><span>Horas promedio de sueño:</span><strong id="dashHoras">-- h</strong></div>
-                <div class="metric-row"><span>Jetlag Social:</span><strong id="dashJetlag">-- h</strong></div>
-                <div class="metric-row"><span>Nivel de Estrés:</span><strong id="dashEstres">--</strong></div>
+                <div class="metric-row"><span>Jetlag social:</span><strong id="dashJetlag">-- h</strong></div>
+                <div class="metric-row"><span>Nivel de estrés:</span><strong id="dashEstres">--</strong></div>
             </div>
 
             <div class="card reco-card">
                 <h3><i class="fas fa-lightbulb"></i> Recomendaciones para ti</h3>
                 <p id="dashRecomendacion" class="texto-recomendacion">Cargando sugerencias...</p>
-                <a href="cuestionario.html" class="btn-accion-outline">Actualizar mis datos de este trimestre</a>
+                <a href="../cuestionario.html" class="btn-accion-outline">Actualizar mis datos de este trimestre</a>
             </div>
         </section>
 
-        <!-- Fila 2: Evolución Trimestral (Fuera de tarjeta, diseño panorámico) -->
+        <!-- evolución Trimestral -->
         <section class="evolucion-section">
             <div class="evolucion-header">
-                <h3><i class="fas fa-history"></i> Tu Línea de Tiempo Académica</h3>
+                <h3><i class="fas fa-history"></i> Tu línea de tiempo académica</h3>
                 <p>Registro histórico desde tu trimestre de ingreso. Los espacios vacíos indican trimestres sin evaluación.</p>
             </div>
             
@@ -66,7 +66,7 @@
 
     </main>
 
-    <!-- Nuevo Footer Elegante -->
+    <!-- footer-->
     <footer class="footer-dashboard">
         <div class="footer-contenido">
             <p><strong>Deuda de Sueño</strong> | Proyecto de Web Dinámico</p>
